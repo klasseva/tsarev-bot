@@ -69,18 +69,11 @@
           <td>
             <span class="px-2 py-0.5 rounded bg-border text-xs"> a.status </span>
           </td>
-          <td class="text-right text-gray-400">
-             a.created_at or '' 
-          </td>
+          <td class="text-right text-gray-400"> a.created_at </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-
-    <div class="mt-4">
-      <button hx-get="/applications/ apps[0].id if apps else '' " hx-target="#app-detail" hx-swap="innerHTML"
-              class="hidden"></button>
-    </div>
   </section>
 </div>
 
