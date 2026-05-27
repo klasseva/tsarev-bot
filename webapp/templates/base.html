@@ -54,8 +54,8 @@
 				('/settings', '⚙️', 'Настройки'),
 			] %}
 			{% for url, icon, label in nav %}
-			<a href="{% raw %} url {% endraw %}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-border transition {% if request.url.path.startswith(url) %}bg-border text-white{% endif %}">
-				<span>{% raw %} icon {% endraw %}</span><span>{% raw %} label {% endraw %}</span>
+			<a href=" url " class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-border transition {% if request.url.path.startswith(url) %}bg-border text-white{% endif %}">
+				<span> icon </span><span> label </span>
 			</a>
 			{% endfor %}
 
@@ -69,9 +69,9 @@
 				{% endif %}
 
 				<div class="flex items-center gap-3 px-2 py-2">
-					<img src="{% raw %} avatar_url {% endraw %}" class="w-8 h-8 rounded-full" alt="">
+					<img src=" avatar_url " class="w-8 h-8 rounded-full" alt="">
 					<div class="flex-1 min-w-0">
-						<div class="text-sm truncate">{% raw %} user.get('username') {% endraw %}</div>
+						<div class="text-sm truncate"> user.get('username') </div>
 						<a href="/logout" class="text-xs text-red-400 hover:underline">Выйти</a>
 					</div>
 				</div>
@@ -182,6 +182,7 @@ async function initPickers(root) {
 			}
 		});
 		if (el.dataset.value) ts.setValue(el.dataset.value);
+		}
 	}
 }
 

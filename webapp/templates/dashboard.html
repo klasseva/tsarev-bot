@@ -16,8 +16,8 @@
 	] %}
 	{% for label, value, color in cards %}
 	<div class="bg-panel border border-border rounded-xl p-5">
-		<div class="text-sm text-gray-400 mb-1">{% raw %} label {% endraw %}</div>
-		<div class="text-3xl font-bold {% raw %} color {% endraw %}">{% raw %} value {% endraw %}</div>
+		<div class="text-sm text-gray-400 mb-1"> label </div>
+		<div class="text-3xl font-bold  color "> value </div>
 	</div>
 	{% endfor %}
 </div>
@@ -37,10 +37,10 @@
 		<tbody>
 			{% for a in recent_apps %}
 			<tr class="border-t border-border">
-				<td class="py-2">#{% raw %} a.id {% endraw %}</td>
-				<td>{% raw %} a.title or '—' {% endraw %}</td>
-				<td><span class="px-2 py-1 rounded bg-border text-xs">{% raw %} a.status {% endraw %}</span></td>
-				<td class="text-gray-400">{% raw %} a.created_at {% endraw %}</td>
+				<td class="py-2"># a.id </td>
+				<td> a.title or '—' </td>
+				<td><span class="px-2 py-1 rounded bg-border text-xs"> a.status </span></td>
+				<td class="text-gray-400"> a.created_at </td>
 			</tr>
 			{% endfor %}
 		</tbody>
