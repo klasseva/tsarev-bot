@@ -1,7 +1,0 @@
-body { font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; }
-input, select, textarea { outline: none; }
-input:focus, select:focus, textarea:focus { border-color: #5865F2; }
-details > summary { list-style: none; }
-details > summary::-webkit-details-marker { display: none; }
-.htmx-indicator { opacity: 0; transition: opacity 200ms; }
-.htmx-request .htmx-indicator { opacity: 1; }
