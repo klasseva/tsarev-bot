@@ -5,23 +5,23 @@
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 	{% set cards = [
-		('Заявки', '📨', 'С нашим ботом вы можете создавать заявки для любых целей: в семью, во фракцию, повышение или для любых других идей, которые у вас есть', stats.apps_total, '/applications', 'bg-blue-500/20 text-blue-400'),
-		('Ожидают', '⏳', 'Заявки, которые ждут вашей реакции и решения', stats.apps_pending, '/applications', 'bg-yellow-500/20 text-yellow-400'),
-		('Активные контракты', '📜', 'Контракты, которые сейчас в работе', stats.contracts_active, '/contracts', 'bg-purple-500/20 text-purple-400'),
-		('Выполненные', '✅', 'Завершённые контракты и сделки', stats.contracts_done, '/contracts', 'bg-green-500/20 text-green-400'),
-		('Предметы', '📦', 'Учёт всех предметов фракции', stats.inventory_items, '/inventory', 'bg-pink-500/20 text-pink-400'),
-		('Открытые сборы', '🔥', 'Сборы, которые сейчас идут', stats.plus_open, '/plus', 'bg-orange-500/20 text-orange-400'),
-		('Панели ролей', '🎚️', 'Управление панелями ролей сервера', stats.role_panels, '/roles', 'bg-cyan-500/20 text-cyan-400'),
-		('AFK', '💤', 'Пользователи, которые сейчас в AFK', stats.afk_users, '/monitor', 'bg-gray-500/20 text-gray-400'),
+		('Заявки', '📨', 'С нашим ботом вы можете создавать заявки для любых целей.', stats.apps_total, '/applications', 'bg-blue-500/20 text-blue-400'),
+		('Ожидают', '⏳', 'Заявки, которые ждут реакции.', stats.apps_pending, '/applications', 'bg-yellow-500/20 text-yellow-400'),
+		('Активные контракты', '📜', 'Контракты в работе.', stats.contracts_active, '/contracts', 'bg-purple-500/20 text-purple-400'),
+		('Выполненные', '✅', 'Завершённые контракты.', stats.contracts_done, '/contracts', 'bg-green-500/20 text-green-400'),
+		('Предметы', '📦', 'Учёт предметов.', stats.inventory_items, '/inventory', 'bg-pink-500/20 text-pink-400'),
+		('Открытые сборы', '🔥', 'Сборы в процессе.', stats.plus_open, '/plus', 'bg-orange-500/20 text-orange-400'),
+		('Панели ролей', '🎚️', 'Панели ролей.', stats.role_panels, '/roles', 'bg-cyan-500/20 text-cyan-400'),
+		('AFK', '💤', 'Пользователи в AFK.', stats.afk_users, '/monitor', 'bg-gray-500/20 text-gray-400'),
 	] %}
 	{% for title, icon, desc, value, link, color in cards %}
 	<div class="bg-panel border border-border rounded-2xl p-5 flex flex-col">
-		<div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4 [[ color ]]">[[ icon ]]</div>
-		<div class="text-lg font-bold text-white mb-1">[[ title ]]</div>
-		<div class="text-sm text-gray-400 mb-4 flex-1">[[ desc ]]</div>
+		<div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4 {{ color }}">{{ icon }}</div>
+		<div class="text-lg font-bold text-white mb-1">{{ title }}</div>
+		<div class="text-sm text-gray-400 mb-4 flex-1">{{ desc }}</div>
 		<div class="flex items-center justify-between">
-			<span class="text-2xl font-bold text-white">[[ value if value is not none else 0 ]]</span>
-			<a href="[[ link ]]" class="bg-primary hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">Перейти</a>
+			<span class="text-2xl font-bold text-white">{{ value if value is not none else 0 }}</span>
+			<a href="{{ link }}" class="bg-primary hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">Перейти</a>
 		</div>
 	</div>
 	{% endfor %}
@@ -31,27 +31,21 @@
 	<h2 class="text-xl font-bold mb-4">Последние заявки</h2>
 	{% if recent_apps %}
 	<table class="w-full text-sm">
-		<thead class="text-gray-400">
-			<tr>
-				<th class="text-left py-2">#</th>
-				<th class="text-left">Тип</th>
-				<th class="text-left">Статус</th>
-				<th class="text-left">Создана</th>
-			</tr>
-		</thead>
+		<thead class="text-gray-400"><tr>
+			<th class="text-left py-2">#</th><th class="text-left">Тип</th>
+			<th class="text-left">Статус</th><th class="text-left">Создана</th>
+		</tr></thead>
 		<tbody>
 			{% for a in recent_apps %}
 			<tr class="border-t border-border">
-				<td class="py-2">#[[ a.id ]]</td>
-				<td>[[ a.title or '—' ]]</td>
-				<td><span class="px-2 py-1 rounded bg-border text-xs">[[ a.status ]]</span></td>
-				<td class="text-gray-400">[[ a.created_at ]]</td>
+				<td class="py-2">#{{ a.id }}</td>
+				<td>{{ a.title or '—' }}</td>
+				<td><span class="px-2 py-1 rounded bg-border text-xs">{{ a.status }}</span></td>
+				<td class="text-gray-400">{{ a.created_at }}</td>
 			</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-	{% else %}
-	<p class="text-gray-500">Заявок пока нет.</p>
-	{% endif %}
+	{% else %}<p class="text-gray-500">Заявок пока нет.</p>{% endif %}
 </div>
 {% endblock %}
