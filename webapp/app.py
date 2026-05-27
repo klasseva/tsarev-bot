@@ -5,6 +5,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
+from webapp.routers import sbory
+app.include_router(sbory.router)
+
 from config.settings import settings
 from webapp.routers import (
     applications,
