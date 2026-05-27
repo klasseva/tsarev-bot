@@ -68,10 +68,10 @@
 			] %}
 
 			{% for url, icon, label in nav %}
-				<a href="{% raw %} url {% endraw %}"
+				<a href=" url "
 					class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-border/50 transition border border-transparent {% if request.url.path.startswith(url) %}bg-border/40 border-border/60 text-white{% else %}text-gray-200{% endif %}">
-					<span class="w-6 text-center">{% raw %} icon {% endraw %}</span>
-					<span class="font-medium">{% raw %} label {% endraw %}</span>
+					<span class="w-6 text-center"> icon </span>
+					<span class="font-medium"> label </span>
 				</a>
 			{% endfor %}
 
@@ -85,9 +85,9 @@
 				{% endif %}
 
 				<div class="flex items-center gap-3 px-2 py-2">
-					<img src="{% raw %} avatar_url {% endraw %}" class="w-9 h-9 rounded-full ring-1 ring-border/60" alt="">
+					<img src=" avatar_url " class="w-9 h-9 rounded-full ring-1 ring-border/60" alt="">
 					<div class="flex-1 min-w-0">
-						<div class="text-sm font-medium truncate">{% raw %} user.get('username') {% endraw %}</div>
+						<div class="text-sm font-medium truncate"> user.get('username') </div>
 						<a href="/logout" class="text-xs text-red-400 hover:underline">Выйти</a>
 					</div>
 				</div>
