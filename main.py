@@ -1,101 +1,104 @@
-"""
-Tsarev Bot — точка входа.
-Запуск: python main.py
-"""
-from __future__ import annotations
-
 import asyncio
+import logging
 import os
-import sys
-from pathlib import Path
 
 import discord
+import uvicorn
 from discord.ext import commands
-from dotenv import load_dotenv
 
-from config.settings import Settings
-from database.db import Database
-from utils.logger import setup_logger
+from config.settings import settings
+from database.db import init_db
+from utils.logger import setup_logging
+from webapp.app import create_app
 
-load_dotenv()
-log = setup_logger("bot")
+logger = logging.getLogger("bot")
 
 
 class TsarevBot(commands.Bot):
-    """Главный класс бота."""
+    def __init__(self):
+        intents = discord.Intents.default()
+        intents.members = True
+        intents.message_content = True
+        intents.presences = True
+        super().__init__(command_prefix="!", intents=intents, help_command=None)
 
-    def __init__(self) -> None:
-        intents = discord.Intents.all()  # включите только нужные в проде
-        super().__init__(
-            command_prefix=commands.when_mentioned,
-            intents=intents,
-            help_command=None,
-            case_insensitive=True,
-            allowed_mentions=discord.AllowedMentions(
-                everyone=False, roles=False, users=True, replied_user=True
-            ),
-        )
-        self.settings = Settings.load()
-        self.db: Database = Database(self.settings.db_path)
-        self.start_time: float | None = None
-
-    async def setup_hook(self) -> None:
-        """Вызывается один раз при старте."""
-        # инициализация БД
-        await self.db.connect()
-        await self.db.init_schema()
-        log.info("Database initialized at %s", self.settings.db_path)
-
-        # загрузка cogs
-        cogs_dir = Path(__file__).parent / "cogs"
-        for file in sorted(cogs_dir.glob("*.py")):
-            if file.stem.startswith("_"):
-                continue
-            ext = f"cogs.{file.stem}"
+    async def setup_hook(self):
+        await init_db()
+        cogs = [
+            "cogs.applications",
+            "cogs.contracts",
+            "cogs.inventory",
+            "cogs.plus",
+            "cogs.tempvoice",
+            "cogs.logs",
+            "cogs.roles",
+            "cogs.embed_builder",
+            "cogs.monitor",
+            "cogs.afk",
+        ]
+        for cog in cogs:
             try:
-                await self.load_extension(ext)
-                log.info("Loaded cog: %s", ext)
-            except Exception as e:
-                log.exception("Failed to load %s: %s", ext, e)
+                await self.load_extension(cog)
+                logger.info(f"Loaded cog: {cog}")
+            except Exception as exc:
+                logger.exception(f"Failed to load cog {cog}: {exc}")
 
-        # синхронизация slash-команд
-        if self.settings.main_guild_id:
-            guild = discord.Object(id=self.settings.main_guild_id)
+        if settings.MAIN_GUILD_ID:
+            guild = discord.Object(id=settings.MAIN_GUILD_ID)
             self.tree.copy_global_to(guild=guild)
             synced = await self.tree.sync(guild=guild)
-            log.info("Synced %d commands to guild %d", len(synced), self.settings.main_guild_id)
+            logger.info(f"Synced {len(synced)} commands to guild {settings.MAIN_GUILD_ID}")
         else:
             synced = await self.tree.sync()
-            log.info("Synced %d global commands", len(synced))
+            logger.info(f"Synced {len(synced)} global commands")
 
-    async def on_ready(self) -> None:
-        log.info("Logged in as %s (id=%s)", self.user, self.user.id if self.user else "?")
+    async def on_ready(self):
+        logger.info(f"Logged in as {self.user} (id={self.user.id})")
         await self.change_presence(
+            activity=discord.Game(name="Majestic RP | /help"),
             status=discord.Status.online,
-            activity=discord.Activity(type=discord.ActivityType.watching, name="TSAREV FAMILY 👑"),
         )
 
-    async def close(self) -> None:
-        log.info("Shutting down...")
-        await self.db.close()
-        await super().close()
 
+async def main():
+    setup_logging()
 
-async def _main() -> None:
-    token = os.getenv("DISCORD_TOKEN")
-    if not token:
-        log.critical("DISCORD_TOKEN is not set in .env")
-        sys.exit(1)
+    if not settings.DISCORD_TOKEN:
+        logger.critical("DISCORD_TOKEN is not set in environment")
+        return
 
     bot = TsarevBot()
+    app = create_app(bot)
+
+    port = int(os.environ.get("PORT", 8000))
+    host = os.environ.get("HOST", "0.0.0.0")
+
+    config = uvicorn.Config(
+        app=app,
+        host=host,
+        port=port,
+        log_level="info",
+        access_log=False,
+        loop="asyncio",
+    )
+    server = uvicorn.Server(config)
+
+    logger.info(f"Starting web admin panel on {host}:{port}")
+
     try:
-        await bot.start(token)
+        await asyncio.gather(
+            bot.start(settings.DISCORD_TOKEN),
+            server.serve(),
+        )
     except KeyboardInterrupt:
-        await bot.close()
+        logger.info("Shutdown requested")
+    finally:
+        if not bot.is_closed():
+            await bot.close()
 
 
 if __name__ == "__main__":
     try:
-        asyncio.run(_main())
+        asyncio.run(main())
     except KeyboardInterrupt:
         pass
