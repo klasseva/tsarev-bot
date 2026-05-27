@@ -2,6 +2,8 @@ import os
 from dataclasses import dataclass, field
 
 
+MAIN_GUILD_ID = int(os.getenv("MAIN_GUILD_ID", "0"))
+
 @dataclass
 class Settings:
     # === Discord Bot ===
