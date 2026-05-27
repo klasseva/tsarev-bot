@@ -8,7 +8,7 @@ from discord.ext import commands
 
 from config.settings import settings
 from database.db import init_db
-from utils.logger import setup_logging
+from utils.logger import setup_logger
 from webapp.app import create_app
 
 logger = logging.getLogger("bot")
@@ -61,7 +61,7 @@ class TsarevBot(commands.Bot):
 
 
 async def main():
-    setup_logging()
+    setup_logger()
 
     if not settings.DISCORD_TOKEN:
         logger.critical("DISCORD_TOKEN is not set in environment")
