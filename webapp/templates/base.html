@@ -1,210 +1,189 @@
 <!doctype html>
 <html lang="ru" class="dark">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Tsarev Bot Admin{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/htmx.org@2.0.2"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { extend: { colors: {
-                primary: '#5865F2',
-                tsarev:  '#8B0000',
-                bg:      '#0f1014',
-                panel:   '#1a1b22',
-                border:  '#2a2d36',
-            } } }
-        }
-    </script>
-    <style>
-        /* Тёмная тема для Tom Select */
-        .ts-wrapper.single .ts-control,
-        .ts-wrapper.multi .ts-control,
-        .ts-dropdown { background:#0f1014 !important; color:#e5e7eb !important; border-color:#2a2d36 !important; }
-        .ts-dropdown .active { background:#5865F2 !important; color:#fff !important; }
-        .ts-dropdown .optgroup-header { background:#1a1b22 !important; color:#9ca3af !important; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; }
-        .ts-control input { color:#e5e7eb !important; }
-        .picker-icon { display:inline-block; width:18px; text-align:center; margin-right:6px; opacity:0.7; }
-        .picker-color-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px; vertical-align:middle; background:#9ca3af; }
-        .picker-avatar { width:20px; height:20px; border-radius:50%; margin-right:8px; vertical-align:middle; }
-    </style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}Tsarev Bot Admin{% endblock %}</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://unpkg.com/htmx.org@2.0.2"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+	<link rel="stylesheet" href="/static/css/style.css">
+	<script>
+		tailwind.config = {
+			darkMode: 'class',
+			theme: { extend: { colors: {
+				primary: '#5865F2',
+				tsarev:  '#8B0000',
+				bg:      '#0f1014',
+				panel:   '#1a1b22',
+				border:  '#2a2d36',
+			} } }
+		}
+	</script>
+	<style>
+		/* Тёмная тема для Tom Select */
+		.ts-wrapper.single .ts-control,
+		.ts-wrapper.multi .ts-control,
+		.ts-dropdown { background:#0f1014 !important; color:#e5e7eb !important; border-color:#2a2d36 !important; }
+		.ts-dropdown .active { background:#5865F2 !important; color:#fff !important; }
+		.ts-dropdown .optgroup-header { background:#1a1b22 !important; color:#9ca3af !important; font-size:11px; text-transform:uppercase; letter-spacing:0.05em; }
+		.ts-control input { color:#e5e7eb !important; }
+		.picker-icon { display:inline-block; width:18px; text-align:center; margin-right:6px; opacity:0.7; }
+		.picker-color-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:8px; vertical-align:middle; background:#9ca3af; }
+		.picker-avatar { width:20px; height:20px; border-radius:50%; margin-right:8px; vertical-align:middle; }
+	</style>
 </head>
 <body class="bg-bg text-gray-200 min-h-screen">
 {% if user %}
-    <div class="flex min-h-screen">
-        <aside class="w-60 bg-panel border-r border-border p-4 space-y-1">
-            <div class="flex items-center gap-2 px-2 py-3 mb-4">
-                <span class="text-2xl">👑</span>
-                <span class="font-bold text-lg">Tsarev Admin</span>
-            </div>
-
-            {% set nav = [
-                ('/dashboard', '🏠', 'Главная'),
-                ('/applications', '📨', 'Заявки'),
-                ('/contracts', '📜', 'Контракты'),
-                ('/inventory', '📦', 'Учёт'),
-                ('/plus', '🔥', 'Сборы'),
-                ('/roles', '🎚️', 'Роли'),
-                ('/embed', '🎨', 'Embed'),
-                ('/monitor', '📡', 'Мониторинг'),
-                ('/settings', '⚙️', 'Настройки'),
-            ] %}
-
-            {% for url, icon, label in nav %}
-            <a href=" url " class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-border transition {% if request.url.path.startswith(url) %}bg-border text-white{% endif %}">
-                <span> icon </span><span> label </span>
-            </a>
-            {% endfor %}
-
-            <div class="pt-6 mt-6 border-t border-border">
-                {% set _uid = user.get('id') %}
-                {% set _avatar = user.get('avatar') %}
-                {% if _uid and _avatar %}
-                    {% set avatar_url = 'https://cdn.discordapp.com/avatars/' ~ _uid ~ '/' ~ _avatar ~ '.png?size=64' %}
-                {% else %}
-                    {% set avatar_url = 'https://cdn.discordapp.com/embed/avatars/0.png' %}
-                {% endif %}
-
-                <div class="flex items-center gap-3 px-2 py-2">
-                    <img src=" avatar_url " class="w-8 h-8 rounded-full" alt="">
-                    <div class="flex-1 min-w-0">
-                        <div class="text-sm truncate"> user.get('username') </div>
-                        <a href="/logout" class="text-xs text-red-400 hover:underline">Выйти</a>
-                    </div>
-                </div>
-            </div>
-        </aside>
-        <main class="flex-1 p-8 overflow-x-auto">
-            {% block content %}{% endblock %}
-        </main>
-    </div>
+	<div class="flex min-h-screen">
+		<aside class="w-60 bg-panel border-r border-border p-4 space-y-1">
+			<div class="flex items-center gap-2 px-2 py-3 mb-4">
+				<span class="text-2xl">👑</span>
+				<span class="font-bold text-lg">Tsarev Admin</span>
+			</div>
+			{% set nav = [
+				('/dashboard', '🏠', 'Главная'),
+				('/applications', '📨', 'Заявки'),
+				('/contracts', '📜', 'Контракты'),
+				('/inventory', '📦', 'Учёт'),
+				('/plus', '🔥', 'Сборы'),
+				('/roles', '🎚️', 'Роли'),
+				('/embed', '🎨', 'Embed'),
+				('/monitor', '📡', 'Мониторинг'),
+				('/settings', '⚙️', 'Настройки'),
+			] %}
+			{% for url, icon, label in nav %}
+			<a href=" url " class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-border transition {% if request.url.path.startswith(url) %}bg-border text-white{% endif %}">
+				<span> icon </span><span> label </span>
+			</a>
+			{% endfor %}
+			<div class="pt-6 mt-6 border-t border-border">
+				{% set _uid = user.get('id') %}
+				{% set _avatar = user.get('avatar') %}
+				{% if _uid and _avatar %}
+					{% set avatar_url = 'https://cdn.discordapp.com/avatars/' ~ _uid ~ '/' ~ _avatar ~ '.png?size=64' %}
+				{% else %}
+					{% set avatar_url = 'https://cdn.discordapp.com/embed/avatars/0.png' %}
+				{% endif %}
+				<div class="flex items-center gap-3 px-2 py-2">
+					<img src=" avatar_url " class="w-8 h-8 rounded-full" alt="">
+					<div class="flex-1 min-w-0">
+						<div class="text-sm truncate"> user.get('username') </div>
+						<a href="/logout" class="text-xs text-red-400 hover:underline">Выйти</a>
+					</div>
+				</div>
+			</div>
+		</aside>
+		<main class="flex-1 p-8 overflow-x-auto">
+			{% block content %}{% endblock %}
+		</main>
+	</div>
 {% else %}
-    {% block bare %}{% endblock %}
+	{% block bare %}{% endblock %}
 {% endif %}
 
 <script>
-// Иконки для типов каналов
 const CHANNEL_ICONS = {
-    text: '#', voice: '🔊', category: '📁',
-    news: '📣', stage: '📢', forum: '📬', thread: '🧵'
+	text: '#', voice: '🔊', category: '📁',
+	news: '📣', stage: '📢', forum: '📬', thread: '🧵'
 };
-
-// Простой кэш ответов API в пределах страницы
 const _apiCache = {};
 async function fetchJSON(url) {
-    if (_apiCache[url]) return _apiCache[url];
-    const r = await fetch(url, { credentials: 'same-origin' });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const data = await r.json();
-    _apiCache[url] = data;
-    return data;
+	if (_apiCache[url]) return _apiCache[url];
+	const r = await fetch(url, { credentials: 'same-origin' });
+	if (!r.ok) throw new Error('HTTP ' + r.status);
+	const data = await r.json();
+	_apiCache[url] = data;
+	return data;
 }
-
-// Инициализация всех пикеров на странице
 async function initPickers(root) {
-    root = root || document;
-
-    // ===== Channel picker =====
-    for (const el of root.querySelectorAll('[data-picker="channel"]')) {
-        if (el.dataset.pickerInit) continue;
-        el.dataset.pickerInit = '1';
-
-        // фильтр по типам: data-types="text,voice" (пусто = все кроме category, включая войсы)
-        const types = (el.dataset.types || '').split(',').map(s => s.trim()).filter(Boolean);
-        const data = await fetchJSON('/api/channels');
-        let items = data.items;
-        if (types.length) items = items.filter(c => types.includes(c.type));
-        else items = items.filter(c => c.type !== 'category');
-
-        // Группы по категориям
-        const groups = {};
-        for (const c of items) {
-            const gid = c.category_id || '_none';
-            const gname = c.category_name || 'Без категории';
-            if (!groups[gid]) groups[gid] = { value: gid, label: gname };
-        }
-        const opts = items.map(c => ({
-            value: c.id,
-            text: c.name,
-            type: c.type,
-            optgroup: c.category_id || '_none'
-        }));
-
-        const ts = new TomSelect(el, {
-            valueField: 'value',
-            labelField: 'text',
-            searchField: ['text'],
-            options: opts,
-            optgroups: Object.values(groups),
-            optgroupField: 'optgroup',
-            optgroupLabelField: 'label',
-            optgroupValueField: 'value',
-            placeholder: el.placeholder || 'Выберите канал...',
-            allowEmptyOption: !el.required,
-            render: {
-                option: (data, escape) => `<div><span class="picker-icon">${CHANNEL_ICONS[data.type] || '#'}</span>${escape(data.text)}</div>`,
-                item:   (data, escape) => `<div><span class="picker-icon">${CHANNEL_ICONS[data.type] || '#'}</span>${escape(data.text)}</div>`,
-                optgroup_header: (data, escape) => `<div class="optgroup-header">${escape(data.label)}</div>`,
-            }
-        });
-        if (el.dataset.value) ts.setValue(el.dataset.value);
-    }
-
-    // ===== Role picker =====
-    for (const el of root.querySelectorAll('[data-picker="role"]')) {
-        if (el.dataset.pickerInit) continue;
-        el.dataset.pickerInit = '1';
-        const data = await fetchJSON('/api/roles');
-        const ts = new TomSelect(el, {
-            valueField: 'id',
-            labelField: 'name',
-            searchField: ['name'],
-            options: data.items,
-            placeholder: el.placeholder || 'Выберите роль...',
-            allowEmptyOption: !el.required,
-            render: {
-                option: (data, escape) => `<div><span class="picker-color-dot" style="background:${data.color || '#9ca3af'}"></span>${escape(data.name)}</div>`,
-                item:   (data, escape) => `<div><span class="picker-color-dot" style="background:${data.color || '#9ca3af'}"></span>${escape(data.name)}</div>`,
-            }
-        });
-        if (el.dataset.value) ts.setValue(el.dataset.value);
-    }
-
-    // ===== Member picker (с серверным поиском) =====
-    for (const el of root.querySelectorAll('[data-picker="member"]')) {
-        if (el.dataset.pickerInit) continue;
-        el.dataset.pickerInit = '1';
-        const ts = new TomSelect(el, {
-            valueField: 'id',
-            labelField: 'display_name',
-            searchField: ['display_name', 'name'],
-            placeholder: el.placeholder || 'Поиск участника...',
-            allowEmptyOption: !el.required,
-            load: async function(query, callback) {
-                try {
-                    const data = await fetchJSON(`/api/members?q=${encodeURIComponent(query)}`);
-                    callback(data.items);
-                } catch (e) {
-                    callback();
-                }
-            },
-            preload: 'focus',
-            render: {
-                option: (data, escape) => `<div>${data.avatar ? `<img src="${data.avatar}" class="picker-avatar">` : '<span class="picker-icon">👤</span>'}${escape(data.display_name || data.name)}<span class="text-xs text-gray-500 ml-2">@${escape(data.name)}</span></div>`,
-                item:   (data, escape) => `<div>${data.avatar ? `<img src="${data.avatar}" class="picker-avatar">` : '<span class="picker-icon">👤</span>'}${escape(data.display_name || data.name)}</div>`,
-            }
-        });
-        if (el.dataset.value) ts.setValue(el.dataset.value);
-    }
+	root = root || document;
+	for (const el of root.querySelectorAll('[data-picker="channel"]')) {
+		if (el.dataset.pickerInit) continue;
+		el.dataset.pickerInit = '1';
+		const types = (el.dataset.types || '').split(',').map(s => s.trim()).filter(Boolean);
+		const data = await fetchJSON('/api/channels');
+		let items = data.items;
+		if (types.length) items = items.filter(c => types.includes(c.type));
+		else items = items.filter(c => c.type !== 'category');
+		const groups = {};
+		for (const c of items) {
+			const gid = c.category_id || '_none';
+			const gname = c.category_name || 'Без категории';
+			if (!groups[gid]) groups[gid] = { value: gid, label: gname };
+		}
+		const opts = items.map(c => ({
+			value: c.id,
+			text: c.name,
+			type: c.type,
+			optgroup: c.category_id || '_none'
+		}));
+		const ts = new TomSelect(el, {
+			valueField: 'value',
+			labelField: 'text',
+			searchField: ['text'],
+			options: opts,
+			optgroups: Object.values(groups),
+			optgroupField: 'optgroup',
+			optgroupLabelField: 'label',
+			optgroupValueField: 'value',
+			placeholder: el.placeholder || 'Выберите канал...',
+			allowEmptyOption: !el.required,
+			render: {
+				option: (data, escape) => `<div><span class="picker-icon">${CHANNEL_ICONS[data.type] || '#'}</span>${escape(data.text)}</div>`,
+				item:   (data, escape) => `<div><span class="picker-icon">${CHANNEL_ICONS[data.type] || '#'}</span>${escape(data.text)}</div>`,
+				optgroup_header: (data, escape) => `<div class="optgroup-header">${escape(data.label)}</div>`,
+			}
+		});
+		if (el.dataset.value) ts.setValue(el.dataset.value);
+	}
+	for (const el of root.querySelectorAll('[data-picker="role"]')) {
+		if (el.dataset.pickerInit) continue;
+		el.dataset.pickerInit = '1';
+		const data = await fetchJSON('/api/roles');
+		const ts = new TomSelect(el, {
+			valueField: 'id',
+			labelField: 'name',
+			searchField: ['name'],
+			options: data.items,
+			placeholder: el.placeholder || 'Выберите роль...',
+			allowEmptyOption: !el.required,
+			render: {
+				option: (data, escape) => `<div><span class="picker-color-dot" style="background:${data.color || '#9ca3af'}"></span>${escape(data.name)}</div>`,
+				item:   (data, escape) => `<div><span class="picker-color-dot" style="background:${data.color || '#9ca3af'}"></span>${escape(data.name)}</div>`,
+			}
+		});
+		if (el.dataset.value) ts.setValue(el.dataset.value);
+	}
+	for (const el of root.querySelectorAll('[data-picker="member"]')) {
+		if (el.dataset.pickerInit) continue;
+		el.dataset.pickerInit = '1';
+		const ts = new TomSelect(el, {
+			valueField: 'id',
+			labelField: 'display_name',
+			searchField: ['display_name', 'name'],
+			placeholder: el.placeholder || 'Поиск участника...',
+			allowEmptyOption: !el.required,
+			load: async function(query, callback) {
+				try {
+					const data = await fetchJSON(`/api/members?q=${encodeURIComponent(query)}`);
+					callback(data.items);
+				} catch (e) {
+					callback();
+				}
+			},
+			preload: 'focus',
+			render: {
+				option: (data, escape) => `<div>${data.avatar ? `<img src="${data.avatar}" class="picker-avatar">` : '<span class="picker-icon">👤</span>'}${escape(data.display_name || data.name)}<span class="text-xs text-gray-500 ml-2">@${escape(data.name)}</span></div>`,
+				item:   (data, escape) => `<div>${data.avatar ? `<img src="${data.avatar}" class="picker-avatar">` : '<span class="picker-icon">👤</span>'}${escape(data.display_name || data.name)}</div>`,
+			}
+		});
+		if (el.dataset.value) ts.setValue(el.dataset.value);
+	}
 }
 
 document.addEventListener('DOMContentLoaded', () => initPickers());
-// Повторная инициализация после htmx-подгрузки фрагментов
 document.addEventListener('htmx:afterSwap', e => initPickers(e.detail.target));
 </script>
 </body>
