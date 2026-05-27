@@ -13,8 +13,9 @@ async def login(request: Request):
     request.session["oauth_state"] = state
     templates = request.app.state.templates
     return templates.TemplateResponse(
+        request,
         "login.html",
-        {"request": request, "oauth_url": authorize_url(state)},
+        {"oauth_url": authorize_url(state)},
     )
 
 
@@ -35,9 +36,9 @@ async def auth_callback(request: Request, code: str | None = None, state: str | 
     if not ok:
         templates = request.app.state.templates
         return templates.TemplateResponse(
+            request,
             "login.html",
             {
-                "request": request,
                 "oauth_url": authorize_url(new_state()),
                 "error": f"Доступ запрещён: {reason}",
             },
