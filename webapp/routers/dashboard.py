@@ -4,8 +4,8 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from core.database import db
-from core.security import require_login
+from database.db import db
+from webapp.security import require_login
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
