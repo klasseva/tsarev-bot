@@ -1,0 +1,132 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #1b1d24;
+  color: #e6e8ee;
+  font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 14px;
+}
+.page { max-width: 980px; margin: 0 auto; padding: 24px; }
+.header { display: flex; justify-content: space-between; align-items: flex-start; }
+.title-row { display: flex; align-items: center; gap: 12px; }
+h1 { margin: 0; font-size: 26px; }
+h2 { margin: 0 0 16px; font-size: 16px; }
+h3 { margin: 0 0 12px; font-size: 14px; color: #c9ccd6; }
+.desc { color: #8a8f9c; margin: 8px 0 24px; }
+.desc a { color: #6c8cff; }
+
+.save-btn {
+  background: #5b6aff33; color: #c8d0ff;
+  border: 1px solid #5b6aff66; border-radius: 8px;
+  padding: 8px 18px; cursor: pointer;
+}
+.save-btn:hover { background: #5b6aff55; }
+
+.card {
+  background: #232631; border-radius: 14px;
+  padding: 20px; margin-bottom: 16px;
+}
+.subcard {
+  background: #2a2d3a; border-radius: 12px;
+  padding: 16px; margin-top: 12px;
+}
+.row-between { display: flex; justify-content: space-between; align-items: center; }
+.row-toggle { display: flex; justify-content: space-between; align-items: center; }
+.row-title { font-weight: 500; }
+.row-desc { color: #8a8f9c; font-size: 12px; margin-top: 2px; }
+.hint { color: #8a8f9c; font-size: 12px; margin-top: 10px; }
+
+.field-label { display: block; color: #c9ccd6; margin: 12px 0 6px; }
+.req { color: #ff5a5a; }
+
+.toggle-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid #ffffff0a;
+}
+.toggle-row:last-child { border-bottom: none; }
+
+/* Switch */
+.switch { position: relative; display: inline-block; width: 42px; height: 22px; flex: none; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; inset: 0; background: #3a3d4a;
+  border-radius: 22px; cursor: pointer; transition: .2s;
+}
+.slider::before {
+  content: ""; position: absolute; height: 16px; width: 16px;
+  left: 3px; top: 3px; background: white; border-radius: 50%;
+  transition: .2s;
+}
+.switch input:checked + .slider { background: #5b6aff; }
+.switch input:checked + .slider::before { transform: translateX(20px); }
+
+/* Select */
+.select-btn {
+  width: 100%; text-align: left; padding: 10px 12px;
+  background: #2f3340; color: #e6e8ee;
+  border: 1px solid #ffffff10; border-radius: 8px; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.select-btn.active { background: #5b6aff; }
+.dropdown {
+  position: absolute; z-index: 50; margin-top: 4px;
+  background: #2a2d3a; border: 1px solid #ffffff14;
+  border-radius: 10px; padding: 8px; width: 320px;
+  box-shadow: 0 12px 30px #00000080;
+}
+.dropdown .search {
+  width: 100%; padding: 8px; background: #1f2230;
+  border: 1px solid #ffffff14; border-radius: 6px; color: #e6e8ee;
+  margin-bottom: 8px;
+}
+.dropdown .clear-btn { color: #8a8f9c; padding: 6px 8px; cursor: pointer; }
+.dropdown .clear-btn:hover { color: #fff; }
+.dropdown .category { color: #8a8f9c; padding: 6px 8px; font-size: 12px; }
+.dropdown .option {
+  padding: 6px 8px; border-radius: 6px; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+}
+.dropdown .option:hover { background: #ffffff10; }
+.dropdown .option.selected { background: #5b6aff44; }
+
+/* Channel select wrapper */
+.channel-select { position: relative; }
+
+/* Role multiselect */
+.role-multiselect {
+  position: relative;
+  background: #2f3340; border: 1px solid #ffffff10;
+  border-radius: 8px; padding: 6px; min-height: 42px;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+}
+.chip {
+  background: #3a3f55; border-radius: 6px;
+  padding: 4px 8px; display: inline-flex; align-items: center; gap: 6px;
+}
+.chip .x { cursor: pointer; color: #b0b4c2; }
+.add-chip {
+  background: transparent; border: none; color: #b0b4c2;
+  font-size: 18px; cursor: pointer; padding: 0 8px;
+}
+
+/* Sortable */
+.sortable {
+  list-style: none; padding: 12px; margin: 0;
+  background: #1f2230; border-radius: 10px; min-height: 80px;
+}
+.sortable:empty::before {
+  content: "Добавьте роли для создания иерархии";
+  color: #6b6f7d; display: block; text-align: center; padding: 10px;
+}
+.sortable li {
+  background: #2f3340; padding: 8px 12px; border-radius: 6px;
+  margin-bottom: 6px; display: flex; justify-content: space-between;
+  cursor: grab;
+}
+.sortable li.dragging { opacity: .5; }
+.ghost-btn {
+  width: 100%; background: transparent; color: #8a8f9c;
+  border: 1px dashed #ffffff20; border-radius: 8px;
+  padding: 10px; cursor: pointer; margin-top: 6px;
+}
+.ghost-btn:hover { color: #fff; border-color: #ffffff40; }
