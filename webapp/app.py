@@ -8,6 +8,9 @@ from starlette.middleware.sessions import SessionMiddleware
 from webapp.routers import sbory
 app.include_router(sbory.router)
 
+from fastapi.staticfiles import StaticFiles
+app.mount("/static", StaticFiles(directory="webapp/static"), name="static")
+
 from config.settings import settings
 from webapp.routers import (
     applications,
