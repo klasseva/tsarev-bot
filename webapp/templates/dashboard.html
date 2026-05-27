@@ -3,26 +3,31 @@
 {% block content %}
 <h1 class="text-3xl font-bold mb-6">Главная</h1>
 
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
 	{% set cards = [
-		('📨 Заявок всего', stats.apps_total, 'text-blue-400'),
-		('⏳ Ожидают', stats.apps_pending, 'text-yellow-400'),
-		('📜 Активных контрактов', stats.contracts_active, 'text-purple-400'),
-		('✅ Выполнено', stats.contracts_done, 'text-green-400'),
-		('📦 Предметов', stats.inventory_items, 'text-pink-400'),
-		('🔥 Открытых сборов', stats.plus_open, 'text-orange-400'),
-		('🎚️ Панелей ролей', stats.role_panels, 'text-cyan-400'),
-		('💤 AFK', stats.afk_users, 'text-gray-400'),
+		('Заявки', '📨', 'С нашим ботом вы можете создавать заявки для любых целей: в семью, во фракцию, повышение или для любых других идей, которые у вас есть', stats.apps_total, '/applications', 'bg-blue-500/20 text-blue-400'),
+		('Ожидают', '⏳', 'Заявки, которые ждут вашей реакции и решения', stats.apps_pending, '/applications', 'bg-yellow-500/20 text-yellow-400'),
+		('Активные контракты', '📜', 'Контракты, которые сейчас в работе', stats.contracts_active, '/contracts', 'bg-purple-500/20 text-purple-400'),
+		('Выполненные', '✅', 'Завершённые контракты и сделки', stats.contracts_done, '/contracts', 'bg-green-500/20 text-green-400'),
+		('Предметы', '📦', 'Учёт всех предметов фракции', stats.inventory_items, '/inventory', 'bg-pink-500/20 text-pink-400'),
+		('Открытые сборы', '🔥', 'Сборы, которые сейчас идут', stats.plus_open, '/plus', 'bg-orange-500/20 text-orange-400'),
+		('Панели ролей', '🎚️', 'Управление панелями ролей сервера', stats.role_panels, '/roles', 'bg-cyan-500/20 text-cyan-400'),
+		('AFK', '💤', 'Пользователи, которые сейчас в AFK', stats.afk_users, '/monitor', 'bg-gray-500/20 text-gray-400'),
 	] %}
-	{% for label, value, color in cards %}
-	<div class="bg-panel border border-border rounded-xl p-5">
-		<div class="text-sm text-gray-400 mb-1"> label </div>
-		<div class="text-3xl font-bold  color "> value </div>
+	{% for title, icon, desc, value, link, color in cards %}
+	<div class="bg-panel border border-border rounded-2xl p-5 flex flex-col">
+		<div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4  color "> icon </div>
+		<div class="text-lg font-bold text-white mb-1"> title </div>
+		<div class="text-sm text-gray-400 mb-4 flex-1"> desc </div>
+		<div class="flex items-center justify-between">
+			<span class="text-2xl font-bold text-white"> value if value is not none else 0 </span>
+			<a href=" link " class="bg-primary hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">Перейти</a>
+		</div>
 	</div>
 	{% endfor %}
 </div>
 
-<div class="bg-panel border border-border rounded-xl p-6">
+<div class="bg-panel border border-border rounded-2xl p-6">
 	<h2 class="text-xl font-bold mb-4">Последние заявки</h2>
 	{% if recent_apps %}
 	<table class="w-full text-sm">
