@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 
 from database.db import db
 from webapp.security import require_admin, require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 
 @router.get("", response_class=HTMLResponse)
@@ -16,9 +14,11 @@ templates = Jinja2Templates(directory="templates")
 async def index(request: Request):
     guilds = await db.fetchall("SELECT * FROM guild_settings")
     logs = await db.fetchall("SELECT * FROM log_channels")
+    templates = request.app.state.templates
     return templates.TemplateResponse(
+        request,
         "settings.html",
-        {"request": request, "guilds": guilds, "logs": logs, "user": request.session["user"]},
+        {"guilds": guilds, "logs": logs, "user": request.session["user"]},
     )
 
 
