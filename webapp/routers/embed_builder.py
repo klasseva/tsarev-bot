@@ -6,8 +6,8 @@ from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from core.database import db
-from core.security import require_admin, require_login
+from webapp.security import require_admin
+from webapp.security import require_admin, require_login
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
