@@ -5,12 +5,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
-from webapp.routers import sbory
-app.include_router(sbory.router)
-
-from fastapi.staticfiles import StaticFiles
-app.mount("/static", StaticFiles(directory="webapp/static"), name="static")
-
 from config.settings import settings
 from webapp.routers import (
     applications,
@@ -22,6 +16,7 @@ from webapp.routers import (
     monitor,
     plus,
     roles,
+    sbory,
 )
 from webapp.routers import settings as settings_router
 
@@ -45,6 +40,7 @@ def create_app(bot):
 
     app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
+    app.include_router(sbory.router)
     app.include_router(auth.router)
     app.include_router(dashboard.router)
     app.include_router(applications.router, prefix="/applications", tags=["applications"])
