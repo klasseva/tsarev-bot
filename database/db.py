@@ -37,7 +37,7 @@ class Database:
     async def close(self) -> None:
         if self._conn:
             await self._conn.close()
-            self._conn = None
+        self._conn = None
 
     # ---------- shortcuts ----------
     async def execute(self, sql: str, params: Iterable[Any] = ()) -> aiosqlite.Cursor:
@@ -65,6 +65,7 @@ class Database:
 db = Database("database/database.db")
 
 
-async def init_db():
+async def init_db() -> Database:
     await db.connect()
     await db.init_schema()
+    return db
