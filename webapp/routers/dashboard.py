@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 
 from database.db import db
 from webapp.security import require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/dashboard", response_class=HTMLResponse)
@@ -43,7 +41,13 @@ async def dashboard(request: Request):
     except Exception:
         recent_apps = []
 
+    templates = request.app.state.templates
     return templates.TemplateResponse(
+        request,
         "dashboard.html",
-        {"request": request, "stats": stats, "recent_apps": recent_apps, "user": request.session["user"]},
+        {
+            "stats": stats,
+            "recent_apps": recent_apps,
+            "user": request.session["user"],
+        },
     )
