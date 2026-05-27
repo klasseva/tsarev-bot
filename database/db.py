@@ -60,3 +60,11 @@ class Database:
     @staticmethod
     def loads(s: str | None) -> Any:
         return json.loads(s) if s else None
+
+
+db = Database("database/database.db")
+
+
+async def init_db():
+    await db.connect()
+    await db.init_schema()
