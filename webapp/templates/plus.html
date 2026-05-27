@@ -3,46 +3,46 @@
 {% block title %}Сборы{% endblock %}
 {% block content %}
 <div class="flex items-center justify-between mb-6">
-  <h1 class="text-3xl font-bold">🔥 Сборы «Плюсы»</h1>
+    <h1 class="text-3xl font-bold">🔥 Сборы «Плюсы»</h1>
 </div>
 
 <details class="bg-panel border border-border rounded-xl p-6 mb-6">
-  <summary class="cursor-pointer font-bold">+ Создать сбор</summary>
-  <form method="post" action="/plus/create" class="grid grid-cols-2 gap-4 mt-4">
-    <input name="guild_id" type="number" placeholder="Guild ID" required class="bg-bg border border-border rounded px-3 py-2">
-    <input name="channel_id" type="number" placeholder="Channel ID" required class="bg-bg border border-border rounded px-3 py-2">
-    <input name="title" placeholder="Название (например: ВЗМ • Обзвон #1)" required class="col-span-2 bg-bg border border-border rounded px-3 py-2">
-    <input name="event_date" placeholder="Дата (например: сегодня 21:00)" class="bg-bg border border-border rounded px-3 py-2">
-    <input name="slots" type="number" value="0" placeholder="Слоты (0 = безлимит)" class="bg-bg border border-border rounded px-3 py-2">
-    <input name="role_id" type="number" placeholder="Role ID для пинга" class="bg-bg border border-border rounded px-3 py-2">
-    <input name="branch" placeholder="Ветка" class="bg-bg border border-border rounded px-3 py-2">
-    <textarea name="comment" placeholder="Комментарий" class="col-span-2 bg-bg border border-border rounded px-3 py-2"></textarea>
-    <input name="image_url" placeholder="URL картинки" class="col-span-2 bg-bg border border-border rounded px-3 py-2">
-    <button class="col-span-2 bg-green-600 hover:bg-green-700 rounded py-2">Создать</button>
-  </form>
+    <summary class="cursor-pointer font-bold">+ Создать сбор</summary>
+    <form method="post" action="/plus/create" class="grid grid-cols-2 gap-4 mt-4">
+        <input name="guild_id" type="number" placeholder="Guild ID" required class="bg-bg border border-border rounded px-3 py-2">
+        <input name="channel_id" type="number" placeholder="Channel ID" required class="bg-bg border border-border rounded px-3 py-2">
+        <input name="title" placeholder="Название (например: ВЗМ • Обзвон #1)" required class="col-span-2 bg-bg border border-border rounded px-3 py-2">
+        <input name="event_date" placeholder="Дата (например: сегодня 21:00)" class="bg-bg border border-border rounded px-3 py-2">
+        <input name="slots" type="number" value="0" placeholder="Слоты (0 = безлимит)" class="bg-bg border border-border rounded px-3 py-2">
+        <input name="role_id" type="number" placeholder="Role ID для пинга" class="bg-bg border border-border rounded px-3 py-2">
+        <input name="branch" placeholder="Ветка" class="bg-bg border border-border rounded px-3 py-2">
+        <textarea name="comment" placeholder="Комментарий" class="col-span-2 bg-bg border border-border rounded px-3 py-2"></textarea>
+        <input name="image_url" placeholder="URL картинки" class="col-span-2 bg-bg border border-border rounded px-3 py-2">
+        <button class="col-span-2 bg-green-600 hover:bg-green-700 rounded py-2">Создать</button>
+    </form>
 </details>
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-  {% for e in events %}
+    {% for e in events %}
     <div class="bg-panel border border-border rounded-xl p-5">
-      <div class="flex items-center justify-between mb-2">
-        <div class="font-bold text-lg"># e.id  ·  e.title </div>
-        <span class="px-2 py-0.5 rounded text-xs {% if e.status=='open' %}bg-green-700{% else %}bg-gray-700{% endif %}"> e.status </span>
-      </div>
-      <div class="text-sm text-gray-400 mb-3">
-        Дата:  e.event_date or '—'  · Слоты:  e.slots or '∞'  · Участников:  counts[e.id] 
-      </div>
-      <div class="flex gap-2">
-        <button hx-get="/plus/ e.id " hx-target="#plus-detail" hx-swap="innerHTML"
-                class="text-primary text-sm hover:underline">Детали</button>
-        {% if e.status == 'open' %}
-          <form method="post" action="/plus/ e.id /close" class="inline">
-            <button class="text-yellow-400 text-sm hover:underline">Закрыть</button>
-          </form>
-        {% endif %}
-      </div>
+        <div class="flex items-center justify-between mb-2">
+            <div class="font-bold text-lg">#{{ e.id }} · {{ e.title }}</div>
+            <span class="px-2 py-0.5 rounded text-xs {% if e.status=='open' %}bg-green-700{% else %}bg-gray-700{% endif %}">{{ e.status }}</span>
+        </div>
+        <div class="text-sm text-gray-400 mb-3">
+            Дата: {{ e.event_date or '—' }} · Слоты: {{ e.slots or '∞' }} · Участников: {{ counts[e.id] }}
+        </div>
+        <div class="flex gap-2">
+            <button hx-get="/plus/{{ e.id }}" hx-target="#plus-detail" hx-swap="innerHTML"
+                    class="text-primary text-sm hover:underline">Детали</button>
+            {% if e.status == 'open' %}
+            <form method="post" action="/plus/{{ e.id }}/close" class="inline">
+                <button class="text-yellow-400 text-sm hover:underline">Закрыть</button>
+            </form>
+            {% endif %}
+        </div>
     </div>
-  {% endfor %}
+    {% endfor %}
 </div>
 
 <div id="plus-detail" class="mt-6"></div>
