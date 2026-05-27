@@ -33,10 +33,10 @@
     {% for t in types %}
       <div class="flex items-center justify-between py-2 border-b border-border last:border-0">
         <div>
-          <div class="font-medium">{{ t.title }} <span class="text-gray-500 text-xs">#{{ t.id }} · {{ t.name }}</span></div>
-          <div class="text-xs text-gray-400">Канал: {{ t.channel_id }} · Цвет: {{ t.color }}</div>
+          <div class="font-medium">{% raw %} t.title {% endraw %} <span class="text-gray-500 text-xs">#{% raw %} t.id {% endraw %} · {% raw %} t.name {% endraw %}</span></div>
+          <div class="text-xs text-gray-400">Канал: {% raw %} t.channel_id {% endraw %} · Цвет: {% raw %} t.color {% endraw %}</div>
         </div>
-        <form method="post" action="/applications/types/{{ t.id }}/delete">
+        <form method="post" action="/applications/types/{% raw %} t.id {% endraw %}/delete">
           <button class="text-red-400 hover:text-red-300 text-sm">Удалить</button>
         </form>
       </div>
@@ -50,9 +50,9 @@
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-2">
         <h2 class="text-xl font-bold">Ваши Заявки</h2>
-        <span class="text-xs text-gray-400">{{ used }} опубликованных</span>
+        <span class="text-xs text-gray-400">{% raw %} used {% endraw %} опубликованных</span>
       </div>
-      <div class="text-xs text-gray-400">{{ used }}/100 использовано</div>
+      <div class="text-xs text-gray-400">{% raw %} used {% endraw %}/100 использовано</div>
     </div>
 
     <table class="w-full text-sm">
@@ -67,13 +67,13 @@
         {% for a in apps %}
         <tr class="border-b border-border">
           <td class="py-3">
-            <div class="font-medium">{{ a.type_title or '—' }}</div>
-            <div class="text-xs text-gray-500">#{{ a.id }}</div>
+            <div class="font-medium">{% raw %} a.type_title or '—' {% endraw %}</div>
+            <div class="text-xs text-gray-500">#{% raw %} a.id {% endraw %}</div>
           </td>
           <td>
-            <span class="px-2 py-0.5 rounded bg-border text-xs">{{ a.status }}</span>
+            <span class="px-2 py-0.5 rounded bg-border text-xs">{% raw %} a.status {% endraw %}</span>
           </td>
-          <td class="text-right text-gray-400">{{ a.created_at }}</td>
+          <td class="text-right text-gray-400">{% raw %} a.created_at {% endraw %}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -81,7 +81,7 @@
 
     {% if apps %}
     <div class="mt-4">
-      <button hx-get="/applications/{{ apps[0].id }}" hx-target="#app-detail" hx-swap="innerHTML"
+      <button hx-get="/applications/{% raw %} apps[0].id {% endraw %}" hx-target="#app-detail" hx-swap="innerHTML"
               class="text-primary hover:underline text-sm">Открыть последнюю</button>
     </div>
     {% endif %}

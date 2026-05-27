@@ -18,10 +18,10 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
   {% for p in panels %}
     <div class="bg-panel border border-border rounded-xl p-5">
-      <div class="font-bold">Панель #{{ p.id }}</div>
-      <div class="text-sm text-gray-400 mb-2">Серверы: {{ p.server_ids }}</div>
-      <div class="text-xs text-gray-500 mb-3">Канал: {{ p.channel_id }}</div>
-      <form method="post" action="/monitor/{{ p.id }}/delete" onsubmit="return confirm('Удалить?')">
+      <div class="font-bold">Панель # p.id </div>
+      <div class="text-sm text-gray-400 mb-2">Серверы:  p.server_ids </div>
+      <div class="text-xs text-gray-500 mb-3">Канал:  p.channel_id </div>
+      <form method="post" action="/monitor/ p.id /delete" onsubmit="return confirm('Удалить?')">
         <button class="text-red-400 text-sm hover:underline">Удалить</button>
       </form>
     </div>

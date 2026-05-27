@@ -54,8 +54,8 @@
 				('/settings', '⚙️', 'Настройки'),
 			] %}
 			{% for url, icon, label in nav %}
-			<a href="{{ url }}" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-border transition {% if request.url.path.startswith(url) %}bg-border text-white{% endif %}">
-				<span>{{ icon }}</span><span>{{ label }}</span>
+			<a href="37" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-border transition {% if request.url.path.startswith(url) %}bg-border text-white{% endif %}">
+				<span>38</span><span>37</span>
 			</a>
 			{% endfor %}
 
@@ -69,9 +69,9 @@
 				{% endif %}
 
 				<div class="flex items-center gap-3 px-2 py-2">
-					<img src="{{ avatar_url }}" class="w-8 h-8 rounded-full" alt="">
+					<img src="39" class="w-8 h-8 rounded-full" alt="">
 					<div class="flex-1 min-w-0">
-						<div class="text-sm truncate">{{ user.username or user.get(\'\u0438\'+\'d\') or \'User\' }}</div>
+						<div class="text-sm truncate">40</div>
 						<a href="/logout" class="text-xs text-red-400 hover:underline">Выйти</a>
 					</div>
 				</div>

@@ -22,9 +22,9 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
   {% for p in panels %}
     <div class="bg-panel border border-border rounded-xl p-5">
-      <div class="font-bold text-lg mb-1">#{{ p.id }} · {{ p.title }}</div>
-      <div class="text-xs text-gray-400 mb-3">Канал: {{ p.channel_id }} · Цвет: {{ p.color }}</div>
-      <button hx-get="/roles/{{ p.id }}" hx-target="#panel-detail" hx-swap="innerHTML"
+      <div class="font-bold text-lg mb-1"># p.id  ·  p.title </div>
+      <div class="text-xs text-gray-400 mb-3">Канал:  p.channel_id  · Цвет:  p.color </div>
+      <button hx-get="/roles/ p.id " hx-target="#panel-detail" hx-swap="innerHTML"
               class="text-primary text-sm hover:underline">Настроить роли</button>
     </div>
   {% endfor %}
