@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block bare %}
+<div class="min-h-screen flex items-center justify-center">
+  <div class="bg-panel border border-border rounded-2xl p-10 max-w-md w-full text-center">
+    <div class="text-6xl mb-4">👑</div>
+    <h1 class="text-2xl font-bold mb-2">Tsarev Bot Admin</h1>
+    <p class="text-gray-400 mb-8">Войдите через Discord, чтобы управлять ботом.</p>
+    <a href=" oauth_url " class="inline-flex items-center gap-3 bg-primary hover:bg-primary/80 text-white font-medium px-6 py-3 rounded-xl transition">
+      <svg width="22" height="22" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1 4.9A58.6 58.6 0 0 0 45.6.4l-.7 1.3a54 54 0 0 1 13.7 4.4 73 73 0 0 0-22.5-3.6 73 73 0 0 0-22.6 3.6A54 54 0 0 1 27.2 1.7L26.5.4A58.6 58.6 0 0 0 11.9 4.9C2.8 18.5.3 31.8 1.5 44.9a59 59 0 0 0 18 9.1l1.5-2.3c-3-1-5.8-2.4-8.4-4l.7-.5a39 39 0 0 0 41.4 0l.7.5c-2.6 1.6-5.4 3-8.4 4l1.5 2.3a59 59 0 0 0 18-9.1c1.5-15.2-2.6-28.4-6.4-40Zm-36.4 33c-3.5 0-6.4-3.3-6.4-7.3s2.9-7.3 6.4-7.3 6.4 3.3 6.4 7.3-2.9 7.3-6.4 7.3Zm23.6 0c-3.5 0-6.4-3.3-6.4-7.3s2.9-7.3 6.4-7.3 6.4 3.3 6.4 7.3-2.9 7.3-6.4 7.3Z"/></svg>
+      Войти через Discord
+    </a>
+  </div>
+</div>
+{% endblock %}
