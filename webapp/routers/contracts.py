@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 
 from database.db import db
 from webapp.security import require_admin, require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 
 @router.get("", response_class=HTMLResponse)
@@ -21,9 +19,12 @@ async def index(request: Request, status: str | None = None):
         params.append(status)
     sql += " ORDER BY id DESC LIMIT 100"
     rows = await db.fetchall(sql, params)
+
+    templates = request.app.state.templates
     return templates.TemplateResponse(
+        request,
         "contracts.html",
-        {"request": request, "rows": rows, "current_status": status, "user": request.session["user"]},
+        {"rows": rows, "current_status": status, "user": request.session["user"]},
     )
 
 
@@ -43,7 +44,7 @@ async def create(
     user = request.session["user"]
     await db.execute(
         """INSERT INTO contracts(guild_id, title, description, reward, deadline,
-                                 executor_id, creator_id, reward_role, channel_id, status)
+                                  executor_id, creator_id, reward_role, channel_id, status)
            VALUES (?,?,?,?,?,?,?,?,?, 'active')""",
         (guild_id, title, description, reward, deadline,
          executor_id, int(user["id"]), reward_role, channel_id),
