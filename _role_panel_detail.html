@@ -1,0 +1,36 @@
+{# templates/_role_panel_detail.html #}
+<div class="bg-panel border border-border rounded-xl p-6">
+  <h2 class="text-2xl font-bold mb-4">#{{ panel.id }} · {{ panel.title }}</h2>
+
+  <h3 class="font-bold mb-2">Добавить роль</h3>
+  <form method="post" action="/roles/{{ panel.id }}/add" class="grid grid-cols-4 gap-2 mb-6">
+    <input name="role_id" type="number" placeholder="Role ID" required class="bg-bg border border-border rounded px-2 py-1">
+    <input name="label" placeholder="Подпись" required class="bg-bg border border-border rounded px-2 py-1">
+    <input name="emoji" placeholder="Emoji" class="bg-bg border border-border rounded px-2 py-1">
+    <select name="style" class="bg-bg border border-border rounded px-2 py-1">
+      <option value="primary">primary</option>
+      <option value="secondary" selected>secondary</option>
+      <option value="success">success</option>
+      <option value="danger">danger</option>
+    </select>
+    <button class="col-span-4 bg-primary hover:bg-primary/80 rounded py-1">+ Добавить</button>
+  </form>
+
+  <table class="w-full text-sm">
+    <tbody>
+      {% for it in items %}
+      <tr class="border-b border-border">
+        <td class="py-2">{{ it.emoji or '·' }}</td>
+        <td>{{ it.label }}</td>
+        <td class="text-gray-400">{{ it.role_id }}</td>
+        <td class="text-gray-400">{{ it.style }}</td>
+        <td class="text-right">
+          <form method="post" action="/roles/{{ panel.id }}/roles/{{ it.role_id }}/delete">
+            <button class="text-red-400 text-xs hover:underline">×</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>

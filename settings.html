@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Настройки{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">⚙️ Настройки</h1>
+
+<div class="bg-panel border border-border rounded-xl p-6 mb-6">
+  <h2 class="text-xl font-bold mb-4">Сервер: роли admin/mod</h2>
+  <form method="post" action="/settings/guild" class="grid grid-cols-2 gap-3">
+    <input name="guild_id" type="number" placeholder="Guild ID" required class="bg-bg border border-border rounded px-3 py-2">
+    <input name="admin_role" type="number" placeholder="Admin Role ID" class="bg-bg border border-border rounded px-3 py-2">
+    <input name="mod_role" type="number" placeholder="Mod Role ID" class="bg-bg border border-border rounded px-3 py-2">
+    <input name="log_channel" type="number" placeholder="Log Channel ID" class="bg-bg border border-border rounded px-3 py-2">
+    <input name="welcome_channel" type="number" placeholder="Welcome Channel ID" class="bg-bg border border-border rounded px-3 py-2">
+    <button class="col-span-2 bg-primary hover:bg-primary/80 rounded py-2">Сохранить</button>
+  </form>
+  <table class="w-full text-sm mt-4">
+    <thead class="text-gray-400"><tr><th class="text-left py-2">Guild</th><th class="text-left">Admin</th><th class="text-left">Mod</th><th class="text-left">Log</th></tr></thead>
+    <tbody>
+      {% for g in guilds %}
+      <tr class="border-t border-border">
+        <td class="py-2">{{ g.guild_id }}</td>
+        <td>{{ g.admin_role or '—' }}</td>
+        <td>{{ g.mod_role or '—' }}</td>
+        <td>{{ g.log_channel or '—' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="bg-panel border border-border rounded-xl p-6">
+  <h2 class="text-xl font-bold mb-4">Лог-каналы по категориям</h2>
+  <form method="post" action="/settings/log" class="grid grid-cols-3 gap-3 mb-4">
+    <input name="guild_id" type="number" placeholder="Guild ID" required class="bg-bg border border-border rounded px-3 py-2">
+    <select name="category" class="bg-bg border border-border rounded px-3 py-2">
+      <option value="messages">Сообщения</option>
+      <option value="voice">Голос</option>
+      <option value="moderation">Модерация</option>
+      <option value="members">Участники</option>
+      <option value="roles">Роли</option>
+      <option value="channels">Каналы</option>
+    </select>
+    <input name="channel_id" type="number" placeholder="Channel ID" required class="bg-bg border border-border rounded px-3 py-2">
+    <button class="col-span-3 bg-primary hover:bg-primary/80 rounded py-2">Сохранить</button>
+  </form>
+  <table class="w-full text-sm">
+    <thead class="text-gray-400"><tr><th class="text-left py-2">Guild</th><th class="text-left">Категория</th><th class="text-left">Канал</th></tr></thead>
+    <tbody>
+      {% for l in logs %}
+      <tr class="border-t border-border">
+        <td class="py-2">{{ l.guild_id }}</td>
+        <td>{{ l.category }}</td>
+        <td>{{ l.channel_id }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

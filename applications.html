@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Заявки{% endblock %}
+{% block content %}
+<div class="mb-6">
+  <h1 class="text-3xl font-bold">Заявки</h1>
+  <p class="text-gray-400 mt-2">С нашим ботом вы можете создавать заявки для любых целей: в семью, во фракцию, повышение или для любых других идей. Гайд по настройке смотрите тут → <a class="text-primary hover:underline" href="/faq">FAQ</a></p>
+</div>
+
+<div class="bg-panel border border-border rounded-xl">
+  <button type="button"
+          onclick="document.getElementById('newType').classList.toggle('hidden')"
+          class="w-full flex items-center justify-between px-5 py-4 rounded-xl hover:bg-border transition">
+    <span class="font-semibold">Создать новые заявки</span>
+    <span class="text-2xl leading-none">+</span>
+  </button>
+
+  <form id="newType" method="post" action="/applications/types/create"
+        class="hidden px-5 pb-5 grid grid-cols-2 gap-4">
+    <input name="guild_id" type="number" placeholder="Guild ID" required class="bg-bg border border-border rounded px-3 py-2">
+    <input name="name" placeholder="name (family/faction/...)" required class="bg-bg border border-border rounded px-3 py-2">
+    <input name="title" placeholder="Заголовок" required class="col-span-2 bg-bg border border-border rounded px-3 py-2">
+    <input name="channel_id" type="number" placeholder="Channel ID" required class="bg-bg border border-border rounded px-3 py-2">
+    <input name="accept_role" type="number" placeholder="Accept Role ID (опц.)" class="bg-bg border border-border rounded px-3 py-2">
+    <textarea name="questions" placeholder="Вопросы через |" required rows="2" class="col-span-2 bg-bg border border-border rounded px-3 py-2"></textarea>
+    <input name="image_url" placeholder="URL картинки" class="col-span-2 bg-bg border border-border rounded px-3 py-2">
+    <button class="col-span-2 bg-green-600 hover:bg-green-700 rounded py-2">Создать тип</button>
+  </form>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+  <section class="bg-panel border border-border rounded-xl p-6">
+    <h2 class="text-xl font-bold mb-4">Типы заявок</h2>
+    {% for t in types %}
+      <div class="flex items-center justify-between py-2 border-b border-border last:border-0">
+        <div>
+          <div class="font-medium">{{ t.title }} <span class="text-gray-500 text-xs">#{{ t.id }} · {{ t.name }}</span></div>
+          <div class="text-xs text-gray-400">Канал: {{ t.channel_id }} · Цвет: {{ t.color }}</div>
+        </div>
+        <form method="post" action="/applications/types/{{ t.id }}/delete">
+          <button class="text-red-400 hover:text-red-300 text-sm">Удалить</button>
+        </form>
+      </div>
+    {% else %}
+      <p class="text-gray-500">Нет типов. Создайте первый.</p>
+    {% endfor %}
+  </section>
+
+  <section class="bg-panel border border-border rounded-xl p-6">
+    {% set used = apps|length %}
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <h2 class="text-xl font-bold">Ваши Заявки</h2>
+        <span class="text-xs text-gray-400">{{ used }} опубликованных</span>
+      </div>
+      <div class="text-xs text-gray-400">{{ used }}/100 использовано</div>
+    </div>
+
+    <table class="w-full text-sm">
+      <thead class="text-gray-400">
+        <tr>
+          <th class="text-left py-2">Заявка</th>
+          <th class="text-left">Статус</th>
+          <th class="text-right">Время</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in apps %}
+        <tr class="border-b border-border">
+          <td class="py-3">
+            <div class="font-medium">{{ a.type_title or '—' }}</div>
+            <div class="text-xs text-gray-500">#{{ a.id }}</div>
+          </td>
+          <td>
+            <span class="px-2 py-0.5 rounded bg-border text-xs">{{ a.status }}</span>
+          </td>
+          <td class="text-right text-gray-400">{{ a.created_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if apps %}
+    <div class="mt-4">
+      <button hx-get="/applications/{{ apps[0].id }}" hx-target="#app-detail" hx-swap="innerHTML"
+              class="text-primary hover:underline text-sm">Открыть последнюю</button>
+    </div>
+    {% endif %}
+  </section>
+</div>
+
+<div id="app-detail" class="mt-6"></div>
+{% endblock %}

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Сборы «Плюсы»</title>
+<link rel="stylesheet" href="/static/sbory.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="title-row">
+      <h1>Сборы «Плюсы»</h1>
+      <label class="switch">
+        <input type="checkbox" id="enabled" {% if cfg.enabled %}checked{% endif %}>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <button class="save-btn" id="saveBtn">Сохранить</button>
+  </header>
+
+  <p class="desc">
+    Мы предоставляем удобную функцию Сбора людей на контракты и другие различные мероприятия, такие как MCL, ВЗМ и другие. Гайд по настройке смотрите тут —
+    <a href="#">FAQ</a>
+  </p>
+
+  <!-- Настройка каналов -->
+  <section class="card">
+    <h2>Настройка каналов</h2>
+
+    <label class="field-label">Канал логов <span class="req">*</span></label>
+    <div class="channel-select" data-target="log_channel_id">
+      <button type="button" class="select-btn" id="logChannelBtn">
+        <span class="placeholder">Выберите канал</span>
+        <span class="chevron">▾</span>
+      </button>
+      <div class="dropdown" id="logChannelDropdown" hidden>
+        <input type="text" class="search" placeholder="Поиск каналов...">
+        <div class="clear-btn">Очистить выбор</div>
+        <div class="options"></div>
+      </div>
+    </div>
+
+    <label class="field-label">Роли которые могут создать Сбор <span class="req">*</span></label>
+    <div class="role-multiselect" id="creatorRoles">
+      <div class="chips"></div>
+      <button type="button" class="add-chip">+</button>
+      <div class="dropdown" hidden>
+        <input type="text" class="search" placeholder="Поиск ролей...">
+        <div class="options"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Иерархия ролей -->
+  <section class="card">
+    <div class="row-between">
+      <h2>Иерархия ролей</h2>
+      <label class="switch">
+        <input type="checkbox" id="hierarchy_enabled" {% if cfg.hierarchy_enabled %}checked{% endif %}>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <label class="field-label">Порядок ролей (перетащите для изменения)</label>
+    <ul class="sortable" id="hierarchyList"></ul>
+    <button type="button" class="ghost-btn" id="addHierarchyRole">+ Добавить роль</button>
+    <p class="hint">
+      Иерархия ролей позволяет организовать порядок ролей в Сборах. Роли, расположенные ниже в списке будут перемещены в резерв при условии что человек с ролью с высшим приоритетом зайдет в Сбор.
+    </p>
+  </section>
+
+  <!-- Резерв / Сортировка -->
+  {% set toggles_block = [
+    ('reserve_enabled', 'Резерв', 'Когда человек с более высоким приоритетом входит в переполненный Сбор, человек с ролью по приоритету ниже отправляется в резерв'),
+    ('sort_enabled', 'Сортировка', 'Люди которые отмечены в Сборе плюсом будут отображаться в списке выше')
+  ] %}
+  {% for key, label, desc in toggles_block %}
+  <section class="card row-toggle">
+    <div>
+      <div class="row-title">{{ label }}</div>
+      <div class="row-desc">{{ desc }}</div>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="{{ key }}" {% if cfg[key] %}checked{% endif %}>
+      <span class="slider"></span>
+    </label>
+  </section>
+  {% endfor %}
+
+  <!-- Настройки кнопки управления -->
+  <section class="card">
+    <h2>Настройки кнопки управления</h2>
+
+    <div class="subcard">
+      <h3>Основные функции</h3>
+      {% set main_fns = [
+        ('auto_ready', 'Автоматическая готовность', 'При вступлении в сбор, пользователь автоматически будет отмечен как готов'),
+        ('moderation', 'Модерация', 'Добавление и удаление модераторов Сбора'),
+        ('edits', 'Изменения', 'Добавление возможности менять название и время Сбора'),
+        ('respawn', 'Переспавн', 'Возможность отправить сообщение Сбора в новом сообщении')
+      ] %}
+      {% for key, label, desc in main_fns %}
+      <div class="toggle-row">
+        <div>
+          <div class="row-title">{{ label }}</div>
+          <div class="row-desc">{{ desc }}</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="{{ key }}" {% if cfg[key] %}checked{% endif %}>
+          <span class="slider"></span>
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="subcard">
+      <h3>Голосовой канал</h3>
+      <div class="toggle-row">
+        <div>
+          <div class="row-title">Создание</div>
+          <div class="row-desc">Создаёт голосовой канал и даёт на него ссылку</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="voice_create" {% if cfg.voice_create %}checked{% endif %}>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="row-title">Выбор</div>
+          <div class="row-desc">
+            Возможность выбрать уже существующий голосовой канал.<br>
+            При выборе голосового канала настраивает права так, чтоб все участники Сбора могли войти, <b>после завершения Сбора настройки прав не будут возвращены в исходное состояние</b>
+          </div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="voice_pick" {% if cfg.voice_pick %}checked{% endif %}>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="subcard">
+      <h3>Напоминания</h3>
+      <div class="toggle-row">
+        <div>
+          <div class="row-title">Личные сообщения</div>
+          <div class="row-desc">Отправка напоминания в ЛС</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="remind_dm" {% if cfg.remind_dm %}checked{% endif %}>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="row-title">Канал</div>
+          <div class="row-desc">Отправка напоминания в канал или ветку (если указывали при создании Сбора)</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="remind_channel" {% if cfg.remind_channel %}checked{% endif %}>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="subcard">
+      <h3>Дополнительно</h3>
+      <div class="toggle-row">
+        <div>
+          <div class="row-title">MVP</div>
+          <div class="row-desc">Выбор лучшего участника</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="mvp" {% if cfg.mvp %}checked{% endif %}>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="row-title">Розыгрыш</div>
+          <div class="row-desc">Проведение розыгрышей</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="giveaway" {% if cfg.giveaway %}checked{% endif %}>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script id="initial-data" type="application/json">
+{
+  "cfg": {{ cfg.model_dump() | tojson }},
+  "channels": {{ channels | tojson }},
+  "roles": {{ roles | tojson }},
+  "guild_id": "{{ guild_id }}"
+}
+</script>
+<script src="/static/sbory.js"></script>
+</body>
+</html>
