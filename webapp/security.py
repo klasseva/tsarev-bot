@@ -1,3 +1,5 @@
+from functools import wraps
+
 from fastapi import Request
 from fastapi.responses import RedirectResponse
 from starlette.exceptions import HTTPException
@@ -5,20 +7,8 @@ from starlette.exceptions import HTTPException
 from config.settings import settings
 
 
-class RedirectException(Exception):
-    def __init__(self, url: str):
-        self.url = url
-
-
 def get_session_user(request: Request) -> dict | None:
     return request.session.get("user")
-
-
-def require_login(request: Request) -> dict:
-    user = get_session_user(request)
-    if not user:
-        raise RedirectException("/login")
-    return user
 
 
 def _is_admin(bot, user_id: int) -> tuple[bool, str]:
@@ -47,10 +37,27 @@ def _is_admin(bot, user_id: int) -> tuple[bool, str]:
     return False, "You do not have admin role on this server"
 
 
-def require_admin(request: Request) -> dict:
-    user = require_login(request)
-    bot = request.app.state.bot
-    ok, reason = _is_admin(bot, int(user["id"]))
-    if not ok:
-        raise HTTPException(status_code=403, detail=reason)
-    return user
+def require_login(func):
+    """Decorator: redirect to /login if user is not authenticated."""
+    @wraps(func)
+    async def wrapper(request: Request, *args, **kwargs):
+        user = get_session_user(request)
+        if not user:
+            return RedirectResponse("/login", status_code=302)
+        return await func(request, *args, **kwargs)
+    return wrapper
+
+
+def require_admin(func):
+    """Decorator: require login + admin permissions on the main guild."""
+    @wraps(func)
+    async def wrapper(request: Request, *args, **kwargs):
+        user = get_session_user(request)
+        if not user:
+            return RedirectResponse("/login", status_code=302)
+        bot = request.app.state.bot
+        ok, reason = _is_admin(bot, int(user["id"]))
+        if not ok:
+            raise HTTPException(status_code=403, detail=reason)
+        return await func(request, *args, **kwargs)
+    return wrapper
