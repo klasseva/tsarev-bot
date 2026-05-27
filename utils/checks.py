@@ -22,7 +22,11 @@ def _has_role_or_admin(member: discord.Member, role_ids: set[int]) -> bool:
 def has_mod_role() -> Callable:
     async def predicate(inter: discord.Interaction) -> bool:
         bot = inter.client
-        row = await bot.db.fetchone(
+        db = getattr(bot, "db", None)
+        if db is None:
+            raise MissingPermission("База данных ещё не готова, попробуйте позже.")
+
+        row = await db.fetchone(
             "SELECT mod_role, admin_role FROM guild_settings WHERE guild_id=?",
             (inter.guild_id,),
         )
@@ -38,7 +42,11 @@ def has_mod_role() -> Callable:
 def has_admin_role() -> Callable:
     async def predicate(inter: discord.Interaction) -> bool:
         bot = inter.client
-        row = await bot.db.fetchone(
+        db = getattr(bot, "db", None)
+        if db is None:
+            raise MissingPermission("База данных ещё не готова, попробуйте позже.")
+
+        row = await db.fetchone(
             "SELECT admin_role FROM guild_settings WHERE guild_id=?",
             (inter.guild_id,),
         )
@@ -53,7 +61,9 @@ def has_admin_role() -> Callable:
 
 def is_owner() -> Callable:
     async def predicate(inter: discord.Interaction) -> bool:
-        if inter.user.id == inter.client.settings.owner_id:
+        bot = inter.client
+        owner_id = getattr(getattr(bot, "settings", None), "owner_id", None)
+        if owner_id is not None and inter.user.id == owner_id:
             return True
         raise MissingPermission("Только владелец бота.")
     return app_commands.check(predicate)
