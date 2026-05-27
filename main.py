@@ -22,8 +22,15 @@ class TsarevBot(commands.Bot):
         intents.presences = True
         super().__init__(command_prefix="!", intents=intents, help_command=None)
 
+        # Объявляем атрибуты заранее — заполнятся в setup_hook
+        self.db = None
+        self.settings = settings
+
     async def setup_hook(self):
-        await init_db()
+        # Подключаем БД и сохраняем её на инстансе бота, чтобы доступ
+        # через bot.db работал в когах и чеках.
+        self.db = await init_db()
+
         cogs = [
             "cogs.applications",
             "cogs.contracts",
@@ -58,6 +65,14 @@ class TsarevBot(commands.Bot):
             activity=discord.Game(name="Majestic RP | /help"),
             status=discord.Status.online,
         )
+
+    async def close(self) -> None:
+        # Аккуратно закрываем БД при шатдауне
+        try:
+            if self.db is not None:
+                await self.db.close()
+        finally:
+            await super().close()
 
 
 async def main():
