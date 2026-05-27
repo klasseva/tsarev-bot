@@ -10,7 +10,7 @@ from database.db import db
 from webapp.security import require_admin, require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="webapp/templates")
 
 
 @router.get("", response_class=HTMLResponse)
@@ -23,8 +23,9 @@ async def index(request: Request):
            ORDER BY a.id DESC LIMIT 50"""
     )
     return templates.TemplateResponse(
+        request,
         "applications.html",
-        {"request": request, "types": types, "apps": apps, "user": request.session["user"]},
+        {"types": types, "apps": apps, "user": request.session["user"]},
     )
 
 
@@ -49,7 +50,7 @@ async def create_type(
         raise HTTPException(400, "Нужен хотя бы один вопрос")
     await db.execute(
         """INSERT INTO application_types(guild_id, name, title, description, channel_id,
-           review_hours, questions_json, accept_role, image_url, color)
+                                         review_hours, questions_json, accept_role, image_url, color)
            VALUES (?,?,?,?,?,?,?,?,?,?)""",
         (guild_id, name, title, description, channel_id, review_hours,
          json.dumps(qs, ensure_ascii=False), accept_role, image_url, color),
@@ -76,8 +77,9 @@ async def view_app(request: Request, app_id: int):
         raise HTTPException(404, "Заявка не найдена")
     answers = json.loads(app["answers_json"])
     return templates.TemplateResponse(
-        "_application_detail.html",
-        {"request": request, "app": app, "answers": answers},
+        request,
+        "application_detail.html",
+        {"app": app, "answers": answers},
     )
 
 
@@ -89,7 +91,7 @@ async def update_status(request: Request, app_id: int, status: str = Form(...), 
     user = request.session["user"]
     await db.execute(
         """UPDATE applications SET status=?, moderator_id=?, comment=?,
-           updated_at=datetime('now') WHERE id=?""",
+                                   updated_at=datetime('now') WHERE id=?""",
         (status, int(user["id"]), comment or None, app_id),
     )
     return RedirectResponse(url="/applications", status_code=303)
