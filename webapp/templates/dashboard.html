@@ -1,66 +1,50 @@
 {% extends 'base.html' %}
 {% block title %}Главная — Tsarev Admin{% endblock %}
 {% block content %}
-<div class="flex items-end justify-between gap-4 mb-8">
-	<div>
-		<h1 class="text-3xl font-bold">Главная</h1>
-		<p class="text-sm text-gray-400 mt-1">Сводка по основным разделам панели</p>
-	</div>
-</div>
+<h1 class="text-3xl font-bold mb-6">Главная</h1>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-10">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
 	{% set cards = [
-		('Заявок всего', stats.apps_total, '📨', 'text-blue-400'),
-		('Ожидают', stats.apps_pending, '⏳', 'text-yellow-400'),
-		('Активных контрактов', stats.contracts_active, '📜', 'text-purple-400'),
-		('Выполнено', stats.contracts_done, '✅', 'text-green-400'),
-		('Предметов', stats.inventory_items, '📦', 'text-pink-400'),
-		('Открытых сборов', stats.plus_open, '🔥', 'text-orange-400'),
-		('Панелей ролей', stats.role_panels, '🎚️', 'text-cyan-400'),
-		('AFK', stats.afk_users, '💤', 'text-gray-400'),
+		('📨 Заявок всего', stats.apps_total, 'text-blue-400'),
+		('⏳ Ожидают', stats.apps_pending, 'text-yellow-400'),
+		('📜 Активных контрактов', stats.contracts_active, 'text-purple-400'),
+		('✅ Выполнено', stats.contracts_done, 'text-green-400'),
+		('📦 Предметов', stats.inventory_items, 'text-pink-400'),
+		('🔥 Открытых сборов', stats.plus_open, 'text-orange-400'),
+		('🎚️ Панелей ролей', stats.role_panels, 'text-cyan-400'),
+		('💤 AFK', stats.afk_users, 'text-gray-400'),
 	] %}
-	{% for label, value, icon, color in cards %}
-	<div class="bg-panel border border-border/60 rounded-2xl p-5 hover:border-border transition">
-		<div class="flex items-center justify-between">
-			<div class="text-sm text-gray-400"> label </div>
-			<div class="text-xl opacity-80"> icon </div>
-		</div>
-		<div class="mt-3 text-4xl font-bold  color "> value </div>
+	{% for label, value, color in cards %}
+	<div class="bg-panel border border-border rounded-xl p-5">
+		<div class="text-sm text-gray-400 mb-1">{% raw %} label {% endraw %}</div>
+		<div class="text-3xl font-bold {% raw %} color {% endraw %}">{% raw %} value {% endraw %}</div>
 	</div>
 	{% endfor %}
 </div>
 
-<div class="bg-panel border border-border/60 rounded-2xl p-6">
-	<div class="flex items-center justify-between mb-4">
-		<h2 class="text-xl font-bold">Последние заявки</h2>
-		<a href="/applications" class="text-sm text-primary hover:underline">Перейти</a>
-	</div>
-
+<div class="bg-panel border border-border rounded-xl p-6">
+	<h2 class="text-xl font-bold mb-4">Последние заявки</h2>
 	{% if recent_apps %}
-	<div class="overflow-x-auto">
-		<table class="w-full text-sm">
-			<thead class="text-gray-400">
-				<tr>
-					<th class="text-left py-2 pr-4">#</th>
-					<th class="text-left pr-4">Тип</th>
-					<th class="text-left pr-4">Статус</th>
-					<th class="text-left">Создана</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for a in recent_apps %}
-				<tr class="border-t border-border/60">
-					<td class="py-3 pr-4"># a.id </td>
-					<td class="pr-4"> a.title or '—' </td>
-					<td class="pr-4">
-						<span class="px-2 py-1 rounded-lg bg-border/40 text-xs"> a.status </span>
-					</td>
-					<td class="text-gray-400"> a.created_at </td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
+	<table class="w-full text-sm">
+		<thead class="text-gray-400">
+			<tr>
+				<th class="text-left py-2">#</th>
+				<th class="text-left">Тип</th>
+				<th class="text-left">Статус</th>
+				<th class="text-left">Создана</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for a in recent_apps %}
+			<tr class="border-t border-border">
+				<td class="py-2">#{% raw %} a.id {% endraw %}</td>
+				<td>{% raw %} a.title or '—' {% endraw %}</td>
+				<td><span class="px-2 py-1 rounded bg-border text-xs">{% raw %} a.status {% endraw %}</span></td>
+				<td class="text-gray-400">{% raw %} a.created_at {% endraw %}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 	{% else %}
 	<p class="text-gray-500">Заявок пока нет.</p>
 	{% endif %}
