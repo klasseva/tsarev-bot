@@ -41,6 +41,7 @@
 				<span class="text-2xl">👑</span>
 				<span class="font-bold text-lg">Tsarev Admin</span>
 			</div>
+
 			{% set nav = [
 				('/dashboard', '🏠', 'Главная'),
 				('/applications', '📨', 'Заявки'),
@@ -57,6 +58,7 @@
 				<span> icon </span><span> label </span>
 			</a>
 			{% endfor %}
+
 			<div class="pt-6 mt-6 border-t border-border">
 				{% set _uid = user.get('id') %}
 				{% set _avatar = user.get('avatar') %}
@@ -65,6 +67,7 @@
 				{% else %}
 					{% set avatar_url = 'https://cdn.discordapp.com/embed/avatars/0.png' %}
 				{% endif %}
+
 				<div class="flex items-center gap-3 px-2 py-2">
 					<img src=" avatar_url " class="w-8 h-8 rounded-full" alt="">
 					<div class="flex-1 min-w-0">
