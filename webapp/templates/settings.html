@@ -18,10 +18,10 @@
     <tbody>
       {% for g in guilds %}
       <tr class="border-t border-border">
-        <td class="py-2"> g.guild_id </td>
-        <td> g.admin_role or '—' </td>
-        <td> g.mod_role or '—' </td>
-        <td> g.log_channel or '—' </td>
+        <td class="py-2">{{ g.guild_id }}</td>
+        <td>{{ g.admin_role or '—' }}</td>
+        <td>{{ g.mod_role or '—' }}</td>
+        <td>{{ g.log_channel or '—' }}</td>
       </tr>
       {% endfor %}
     </tbody>
@@ -48,9 +48,9 @@
     <tbody>
       {% for l in logs %}
       <tr class="border-t border-border">
-        <td class="py-2"> l.guild_id </td>
-        <td> l.category </td>
-        <td> l.channel_id </td>
+        <td class="py-2">{{ l.guild_id }}</td>
+        <td>{{ l.category }}</td>
+        <td>{{ l.channel_id }}</td>
       </tr>
       {% endfor %}
     </tbody>

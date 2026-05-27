@@ -7,7 +7,7 @@
 </div>
 
 <form method="get" action="/inventory" class="mb-6">
-  <input name="q" value=" q " placeholder="Поиск по названию или описанию..."
+  <input name="q" value="{{ q or "" }}" placeholder="Поиск по названию или описанию..."
          class="w-full bg-panel border border-border rounded-lg px-4 py-2">
 </form>
 
@@ -18,7 +18,7 @@
     <input name="name" placeholder="Название" required class="bg-bg border border-border rounded px-3 py-2">
     <select name="category_id" class="bg-bg border border-border rounded px-3 py-2">
       <option value="">— без категории —</option>
-      {% for c in cats %}<option value=" c.id "> c.name </option>{% endfor %}
+      {% for c in cats %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
     </select>
     <input name="owner_id" type="number" placeholder="Owner Discord ID" class="bg-bg border border-border rounded px-3 py-2">
     <textarea name="description" placeholder="Описание" rows="2" class="col-span-2 bg-bg border border-border rounded px-3 py-2"></textarea>
@@ -36,13 +36,13 @@
     <tbody>
       {% for r in rows %}
       <tr class="border-t border-border">
-        <td class="p-3"> r.id </td>
-        <td> r.name </td>
-        <td> r.cat_name or '—' </td>
-        <td> r.owner_id or '—' </td>
-        <td class="text-gray-400"> r.created_at </td>
+        <td class="p-3">{{ r.id }}</td>
+        <td>{{ r.name }}</td>
+        <td>{{ r.cat_name or '—' }}</td>
+        <td>{{ r.owner_id or '—' }}</td>
+        <td class="text-gray-400">{{ r.created_at }}</td>
         <td class="p-3 text-right">
-          <form method="post" action="/inventory/ r.id /delete" onsubmit="return confirm('Удалить запись?')">
+          <form method="post" action="/inventory/{{ r.id }}/delete" onsubmit="return confirm('Удалить запись?')">
             <button class="text-red-400 hover:underline text-xs">×</button>
           </form>
         </td>

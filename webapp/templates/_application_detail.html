@@ -1,0 +1,28 @@
+<div class="bg-panel border border-border rounded-xl p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-2xl font-bold">Заявка #{{ app.id }} · {{ app.type_title }}</h2>
+    <span class="px-3 py-1 rounded bg-border">{{ app.status }}</span>
+  </div>
+  <div class="text-sm text-gray-400 mb-4">User ID: {{ app.user_id }} · {{ app.created_at }}</div>
+
+  <div class="space-y-3 mb-6">
+    {% for q in answers %}
+      <div>
+        <div class="text-sm text-gray-400">{{ q.q }}</div>
+        <div class="bg-bg border border-border rounded px-3 py-2 whitespace-pre-wrap">{{ q.a }}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <form method="post" action="/applications/{{ app.id }}/status" class="flex gap-2 items-center">
+    <select name="status" class="bg-bg border border-border rounded px-3 py-2">
+      <option value="pending">Ожидает</option>
+      <option value="review">На рассмотрении</option>
+      <option value="call">Обзвон</option>
+      <option value="accepted">Принят</option>
+      <option value="declined">Отклонён</option>
+    </select>
+    <input name="comment" placeholder="Комментарий (опц.)" class="flex-1 bg-bg border border-border rounded px-3 py-2">
+    <button class="bg-primary hover:bg-primary/80 px-4 py-2 rounded">Сохранить</button>
+  </form>
+</div>
