@@ -79,10 +79,12 @@
       </tbody>
     </table>
 
+    {% if apps %}
     <div class="mt-4">
-      <button hx-get="/applications/ apps[0].id if apps else '' " hx-target="#app-detail" hx-swap="innerHTML"
+      <button hx-get="/applications/ apps[0].id " hx-target="#app-detail" hx-swap="innerHTML"
               class="text-primary hover:underline text-sm">Открыть последнюю</button>
     </div>
+    {% endif %}
   </section>
 </div>
 
