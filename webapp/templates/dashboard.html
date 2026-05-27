@@ -16,12 +16,12 @@
 	] %}
 	{% for title, icon, desc, value, link, color in cards %}
 	<div class="bg-panel border border-border rounded-2xl p-5 flex flex-col">
-		<div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4  color "> icon </div>
-		<div class="text-lg font-bold text-white mb-1"> title </div>
-		<div class="text-sm text-gray-400 mb-4 flex-1"> desc </div>
+		<div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-4 [[ color ]]">[[ icon ]]</div>
+		<div class="text-lg font-bold text-white mb-1">[[ title ]]</div>
+		<div class="text-sm text-gray-400 mb-4 flex-1">[[ desc ]]</div>
 		<div class="flex items-center justify-between">
-			<span class="text-2xl font-bold text-white"> value if value is not none else 0 </span>
-			<a href=" link " class="bg-primary hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">Перейти</a>
+			<span class="text-2xl font-bold text-white">[[ value if value is not none else 0 ]]</span>
+			<a href="[[ link ]]" class="bg-primary hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition">Перейти</a>
 		</div>
 	</div>
 	{% endfor %}
@@ -42,10 +42,10 @@
 		<tbody>
 			{% for a in recent_apps %}
 			<tr class="border-t border-border">
-				<td class="py-2"># a.id </td>
-				<td> a.title or '—' </td>
-				<td><span class="px-2 py-1 rounded bg-border text-xs"> a.status </span></td>
-				<td class="text-gray-400"> a.created_at </td>
+				<td class="py-2">#[[ a.id ]]</td>
+				<td>[[ a.title or '—' ]]</td>
+				<td><span class="px-2 py-1 rounded bg-border text-xs">[[ a.status ]]</span></td>
+				<td class="text-gray-400">[[ a.created_at ]]</td>
 			</tr>
 			{% endfor %}
 		</tbody>
