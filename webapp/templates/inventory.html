@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Учёт{% endblock %}
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-3xl font-bold">📦 Учёт</h1>
+  <a href="/inventory/export" class="bg-border hover:bg-border/80 px-4 py-2 rounded-lg">⬇ Экспорт JSON</a>
+</div>
+
+<form method="get" action="/inventory" class="mb-6">
+  <input name="q" value=" q " placeholder="Поиск по названию или описанию..."
+         class="w-full bg-panel border border-border rounded-lg px-4 py-2">
+</form>
+
+<details class="bg-panel border border-border rounded-xl p-6 mb-6">
+  <summary class="cursor-pointer font-bold">+ Новая запись</summary>
+  <form method="post" action="/inventory/create" class="grid grid-cols-2 gap-4 mt-4">
+    <input name="guild_id" type="number" placeholder="Guild ID" required class="bg-bg border border-border rounded px-3 py-2">
+    <input name="name" placeholder="Название" required class="bg-bg border border-border rounded px-3 py-2">
+    <select name="category_id" class="bg-bg border border-border rounded px-3 py-2">
+      <option value="">— без категории —</option>
+      {% for c in cats %}<option value=" c.id "> c.name </option>{% endfor %}
+    </select>
+    <input name="owner_id" type="number" placeholder="Owner Discord ID" class="bg-bg border border-border rounded px-3 py-2">
+    <textarea name="description" placeholder="Описание" rows="2" class="col-span-2 bg-bg border border-border rounded px-3 py-2"></textarea>
+    <button class="col-span-2 bg-green-600 hover:bg-green-700 rounded py-2">Добавить</button>
+  </form>
+</details>
+
+<div class="bg-panel border border-border rounded-xl overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-border"><tr>
+      <th class="text-left p-3">#</th><th class="text-left">Название</th>
+      <th class="text-left">Категория</th><th class="text-left">Владелец</th>
+      <th class="text-left">Создано</th><th></th>
+    </tr></thead>
+    <tbody>
+      {% for r in rows %}
+      <tr class="border-t border-border">
+        <td class="p-3"> r.id </td>
+        <td> r.name </td>
+        <td> r.cat_name or '—' </td>
+        <td> r.owner_id or '—' </td>
+        <td class="text-gray-400"> r.created_at </td>
+        <td class="p-3 text-right">
+          <form method="post" action="/inventory/ r.id /delete" onsubmit="return confirm('Удалить запись?')">
+            <button class="text-red-400 hover:underline text-xs">×</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
