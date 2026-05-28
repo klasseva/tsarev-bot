@@ -5,13 +5,11 @@ import json
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse
-from fastapi.templating import Jinja2Templates
 
 from database.db import db
 from webapp.security import require_admin, require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 
 @router.get("", response_class=HTMLResponse)
@@ -32,7 +30,7 @@ async def index(request: Request, q: str = ""):
                ORDER BY i.id DESC LIMIT 200"""
         )
     cats = await db.fetchall("SELECT * FROM inventory_categories ORDER BY name")
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         "inventory.html",
         {"request": request, "rows": rows, "cats": cats, "q": q, "user": request.session["user"]},
     )

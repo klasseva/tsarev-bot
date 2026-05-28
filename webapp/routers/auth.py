@@ -6,16 +6,24 @@ from webapp.security import _is_admin
 
 router = APIRouter()
 
+_ERR_MSG = {
+    "state": "Сессия истекла или неверный OAuth state. Войдите снова.",
+    "oauth": "Ошибка Discord OAuth. Проверьте CLIENT_ID/SECRET/REDIRECT_URI.",
+}
+
 
 @router.get("/login")
-async def login(request: Request):
+async def login(request: Request, error: str | None = None):
     state = new_state()
     request.session["oauth_state"] = state
     templates = request.app.state.templates
     return templates.TemplateResponse(
         request,
         "login.html",
-        {"oauth_url": authorize_url(state)},
+        {
+            "oauth_url": authorize_url(state),
+            "error": _ERR_MSG.get(error) if error else None,
+        },
     )
 
 

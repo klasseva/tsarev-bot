@@ -2,20 +2,18 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 
 from database.db import db
 from webapp.security import require_admin, require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 
 @router.get("", response_class=HTMLResponse)
 @require_login
 async def index(request: Request):
     panels = await db.fetchall("SELECT * FROM monitor_panels ORDER BY id DESC")
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         "monitor.html",
         {"request": request, "panels": panels, "user": request.session["user"]},
     )

@@ -1,11 +1,9 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import List, Optional
 
 router = APIRouter(prefix="/sbory", tags=["sbory"])
-templates = Jinja2Templates(directory="webapp/templates")
 
 
 # ---------- Pydantic-модели настроек ----------
@@ -88,7 +86,7 @@ def get_roles(guild_id: str) -> List[RoleOption]:
 # ---------- Маршруты ----------
 @router.get("", response_class=HTMLResponse)
 async def sbory_page(request: Request, guild_id: str = "default"):
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         "sbory.html",
         {
             "request": request,

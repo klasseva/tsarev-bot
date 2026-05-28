@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 
 from database.db import db
 from webapp.security import require_admin, require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 
 @router.get("", response_class=HTMLResponse)
@@ -23,7 +21,7 @@ async def index(request: Request):
             (e["id"],),
         )
         counts[e["id"]] = row["c"] if row else 0
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         "plus.html",
         {"request": request, "events": events, "counts": counts, "user": request.session["user"]},
     )
@@ -39,7 +37,7 @@ async def detail(request: Request, event_id: int):
         "SELECT * FROM plus_participants WHERE event_id=? ORDER BY queue ASC",
         (event_id,),
     )
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         "_plus_detail.html",
         {"request": request, "event": event, "parts": parts},
     )

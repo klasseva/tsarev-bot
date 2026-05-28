@@ -4,13 +4,11 @@ import json
 
 from fastapi import APIRouter, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 
 from database.db import db
 from webapp.security import require_admin, require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="webapp/templates")
 
 
 @router.get("", response_class=HTMLResponse)
@@ -22,7 +20,7 @@ async def index(request: Request):
            LEFT JOIN application_types t ON t.id = a.type_id
            ORDER BY a.id DESC LIMIT 50"""
     )
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         request,
         "applications.html",
         {"types": types, "apps": apps, "user": request.session["user"]},
@@ -76,7 +74,7 @@ async def view_app(request: Request, app_id: int):
     if not app:
         raise HTTPException(404, "Заявка не найдена")
     answers = json.loads(app["answers_json"])
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         request,
         "application_detail.html",
         {"app": app, "answers": answers},

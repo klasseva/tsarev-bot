@@ -4,13 +4,11 @@ import json
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 
-from webapp.security import require_admin
+from database.db import db
 from webapp.security import require_admin, require_login
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 
 @router.get("", response_class=HTMLResponse)
@@ -19,7 +17,7 @@ async def index(request: Request):
     templates_list = await db.fetchall(
         "SELECT * FROM embed_templates ORDER BY id DESC LIMIT 50"
     )
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         "embed_builder.html",
         {"request": request, "templates_list": templates_list, "user": request.session["user"]},
     )
@@ -37,7 +35,7 @@ async def preview(
     footer: str = Form(""),
 ):
     # рендерим только embed-карточку для HTMX swap
-    return templates.TemplateResponse(
+    return request.app.state.templates.TemplateResponse(
         "_embed_preview.html",
         {
             "request": request,
