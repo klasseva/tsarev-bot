@@ -60,8 +60,8 @@
 			{% endfor %}
 
 			<div class="pt-6 mt-6 border-t border-border">
-				{% set _uid = user.get('id') %}
-				{% set _avatar = user.get('avatar') %}
+				{% set _uid = user.id %}
+				{% set _avatar = user.id %}
 				{% if _uid and _avatar %}
 					{% set avatar_url = 'https://cdn.discordapp.com/avatars/' ~ _uid ~ '/' ~ _avatar ~ '.png?size=64' %}
 				{% else %}
