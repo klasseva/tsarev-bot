@@ -11,7 +11,7 @@ from views.plus import PlusView, refresh_plus_message
 EVENT_TYPES = [
     app_commands.Choice(name="MCL", value="MCL"),
     app_commands.Choice(name="ВЗМ", value="VZM"),
-    app_commands.Choice(name="Контракт", value="contract"),
+    app_commands.Choice(name="КАПТ", value="contract"),
     app_commands.Choice(name="Кастом", value="custom"),
 ]
 
