@@ -9,6 +9,7 @@ from config.settings import settings
 from webapp.routers import (
     applications,
     auth,
+    discord_data,
     contracts,
     dashboard,
     embed_builder,
@@ -22,11 +23,6 @@ from webapp.routers import settings as settings_router
 
 BASE_DIR = Path(__file__).parent
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
-# Switch Jinja variable delimiters away from default   because some upstream
-# tooling strips that pattern from template content. Statement/comment
-# delimiters stay as the defaults.
-templates.env.variable_start_string = "[["
-templates.env.variable_end_string = "]]"
 
 
 def create_app(bot):
@@ -45,6 +41,7 @@ def create_app(bot):
 
     app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
+    app.include_router(discord_data.router)
     app.include_router(sbory.router)
     app.include_router(auth.router)
     app.include_router(dashboard.router)
