@@ -42,6 +42,8 @@ class TsarevBot(commands.Bot):
             "cogs.embed_builder",
             "cogs.monitor",
             "cogs.afk",
+            "cogs.permissions",
+            "cogs.errors",
         ]
         for cog in cogs:
             try:
