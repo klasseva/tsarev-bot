@@ -30,6 +30,7 @@ class PlusCog(commands.Cog):
         title: str,
         event: app_commands.Choice[str],
         slots: int = 0,
+        dop slotы: int = 0,
         date: str | None = None,
         role: discord.Role | None = None,
         branch: str | None = None,
