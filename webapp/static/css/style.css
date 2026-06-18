@@ -1,7 +1,74 @@
-body { font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif; }
+/* Global UI polish (CSS-only). Safe: does not touch Jinja templates. */
+
+:root {
+	--bg: #0f1014;
+	--panel: #1a1b22;
+	--panel-2: #151722;
+	--border: #2a2d36;
+	--text: #e5e7eb;
+	--muted: #9ca3af;
+	--primary: #5865F2;
+	--shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+	--shadow-soft: 0 8px 18px rgba(0, 0, 0, 0.25);
+	--radius: 14px;
+}
+
+/* Base */
+html, body { height: 100%; }
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
+	background: var(--bg);
+	color: var(--text);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Better scrollbars (Chromium/WebKit) */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: rgba(255,255,255,.10); border-radius: 999px; border: 2px solid rgba(0,0,0,0); background-clip: padding-box; }
+*::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.16); border: 2px solid rgba(0,0,0,0); background-clip: padding-box; }
+*::-webkit-scrollbar-track { background: rgba(255,255,255,.03); }
+
+/* Form focus */
 input, select, textarea { outline: none; }
-input:focus, select:focus, textarea:focus { border-color: #5865F2; }
+input:focus, select:focus, textarea:focus { border-color: var(--primary) !important; box-shadow: 0 0 0 3px rgba(88,101,242,.15); }
+
+/* Tables */
+table { border-collapse: collapse; }
+thead th { font-weight: 600; letter-spacing: .01em; }
+tr { transition: background 120ms ease; }
+tbody tr:hover { background: rgba(255,255,255,.03); }
+
+/* Cards / panels */
+.bg-panel {
+	background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)) , var(--panel);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow-soft);
+}
+.border-border { border-color: rgba(42,45,54,.9); }
+
+/* Sidebar link hover (fallback if Tailwind classes change) */
+aside a {
+	border-radius: 12px;
+}
+aside a:hover {
+	background: rgba(255,255,255,.04);
+}
+
+/* Subtle “multibot-ish” glass effect for sidebar if supported */
+aside {
+	background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)) , var(--panel);
+	box-shadow: var(--shadow);
+}
+
+/* Better buttons/links */
+a { text-decoration: none; }
+a:hover { text-decoration: none; }
+
+/* Details */
 details > summary { list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
+
+/* HTMX indicator */
 .htmx-indicator { opacity: 0; transition: opacity 200ms; }
 .htmx-request .htmx-indicator { opacity: 1; }
